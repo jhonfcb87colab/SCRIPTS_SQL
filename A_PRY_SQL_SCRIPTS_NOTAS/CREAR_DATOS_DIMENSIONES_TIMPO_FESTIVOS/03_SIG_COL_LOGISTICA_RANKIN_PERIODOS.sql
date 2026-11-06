@@ -1,0 +1,212 @@
+
+SELECT *
+  FROM [SIG_COL_LOGISTICA_DW].[RAN].[PERIODOS]
+  --WHERE [ID_PERIODO] LIKE '2023%'
+  WHERE [ID_PERIODO] > 202606
+
+
+----------INSERT INTO [SIG_COL_LOGISTICA_DW].[RAN].[PERIODOS]
+SELECT REPLACE([ID_PERIODO],'2023','2024') AS [ID_PERIODO]
+      ,REPLACE([DESCRIPCION_PERIODO],'2023','2024') AS [DESCRIPCION_PERIODO]
+  FROM [SIG_COL_LOGISTICA_DW].[RAN].[PERIODOS]
+  WHERE [ID_PERIODO] LIKE '2023%'
+
+
+   SELECT *
+  FROM [SIG_COL_LOGISTICA_DW].[RAN].[PERIODOS]
+  WHERE [ID_PERIODO] = 202606
+
+
+
+  /****** Validacion  de Tablas Insertadas
+INDICADORES INGRESADOS POR ORLANDO
+******/
+
+use [SIG_COL_LOGISTICA_DW]
+
+
+SELECT TOP (1000) [ID_RENTABILIDAD]
+      ,[ID_PERIODO]
+      ,[ID_REGIONAL_PAIS]
+      ,[PORCENTAJE_RENTABILIDAD]
+  FROM [SIG_COL_LOGISTICA_DW].[RAN].[RENTABILIDAD]
+  WHERE ID_PERIODO=202609
+
+SELECT *
+  FROM [RAN].[GASTOS_LAB_VS_VENTAS]
+    WHERE ID_PERIODO=202609
+
+SELECT [ID_ROTACION_TH]
+      ,[ID_PERIODO]
+      ,[ID_REGIONAL_PAIS]
+      ,[INGRESOS]
+      ,[RETIROS]
+      ,[PLANTA]
+      ,[PORCENTAJE_ROTACION]
+  FROM [RAN].[ROTACION_TH]
+  WHERE ID_PERIODO=202609
+
+
+SELECT [ID_SISO_INDICE]
+      ,[ID_PERIODO]
+      ,[ID_REGIONAL_PAIS]
+      ,[INDICE_ANTERIOR]
+      ,[INDICE_ACTUAL]
+      ,[INDICE_ACCIDENTALIDAD]
+  FROM [RAN].[SISO_INDICE]
+  WHERE ID_PERIODO=202609
+
+  SELECT TOP (1000) [ID_RENTABILIDAD]
+      ,[ID_PERIODO]
+      ,[ID_REGIONAL_PAIS]
+      ,[PORCENTAJE_RENTABILIDAD]
+  FROM [SIG_COL_LOGISTICA_DW].[RAN].[RENTABILIDAD]
+  WHERE ID_PERIODO=202609
+
+SELECT [ID_EJECUCION_COSTOS_GASTOS]
+      ,[ID_PERIODO]
+      ,[ID_REGIONAL_PAIS]
+      ,[PORCENTAJE_EJECUCION_COSTOS_GASTOS]
+  FROM [RAN].[EJECUCION_COSTOS_GASTOS]
+  WHERE ID_PERIODO=202609
+
+SELECT TOP (1000) [ID_EJECUCION_PRESUPUESTAL]
+      ,[ID_PERIODO]
+      ,[ID_REGIONAL_PAIS]
+      ,[PRESUPUESTO_VENTAS_TOTALES]
+      ,[EJECUCION_VENTAS_TOTALES]
+      ,[PORCENTAJE_VENTAS_TOTALES]
+      ,[PRESUPUESTO_VENTAS_CORPORATIVAS]
+      ,[EJECUCION_VENTAS_CORPORATIVAS]
+      ,[PORCENTAJE_VENTAS_CORPORATIVAS]
+      ,[PRESUPUESTO_VENTAS_RETAIL]
+      ,[EJECUCION_VENTAS_RETAIL]
+      ,[PORCENTAJE_VENTAS_RETAIL]
+  FROM [SIG_COL_LOGISTICA_DW].[RAN].[EJECUCION_PRESUPUESTAL]
+    WHERE ID_PERIODO=202609
+
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+/******
+INDICADORES INGRESADOS POR LOS SCRIPTS DE LOS MANUALES ARCHIVO EXCEL DE ORLANDO
+******/
+----53-Gastos Lab vs Ventas
+SELECT * FROM [SIG_COL_LOGISTICA_DW].[RAN].[GASTOS_LAB_VS_VENTAS] 
+WHERE ID_PERIODO=202609
+
+----36-Cartera Riesgo
+SELECT * FROM [SIG_COL_LOGISTICA_DW].[RAN].[CARTERA_RIESGO] 
+WHERE ID_PERIODO=202609 
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+
+/******
+REVISION DE TABLAS DE INDICADORES
+******/
+
+SELECT *
+FROM [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING]
+  WHERE Id_Mes=202609
+
+SELECT *  FROM [COGNOS_STG_V3].[dbo].[PRM_PROCESO_RAN] ORDER BY Id_Periodo DESC
+--WHERE Id_Periodo>202211  
+ 
+SELECT id_indicador,Nombre_Indicador,count(1)  FROM [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING] 
+WHERE Id_Mes=202609
+group by id_indicador,Nombre_Indicador 
+--having count(1)<11
+
+SELECT id_indicador,Nombre_Indicador,count(1)  FROM [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING] 
+WHERE Id_Mes=202608
+group by id_indicador,Nombre_Indicador 
+
+
+
+
+----validacion errores 
+SELECT id_indicador,Nombre_Indicador,count(1)  FROM [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING] 
+WHERE Id_Mes=202609
+group by id_indicador,Nombre_Indicador 
+--having count(1)<11
+
+
+
+
+
+
+
+
+/*		AJUSTE INDICADORES FALTANTES		*/
+
+DECLARE @ID_MES_01 INT=202608
+DECLARE @ID_MES_02 INT=202609
+/**/
+----INSERT INTO [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING] -----SOLO SE INSERTA CUANDO SE HAYA VERIFICADO
+SELECT --T02.id_indicador,T01.
+ Id_Mes	= @ID_MES_02
+,T01.Id_Regional	
+,T01.id_indicador	
+,T01.Nombre_Indicador	
+,Meta = 0	
+,Valor_Real	= 0
+,Valor_Cumplimiento	= 0
+,T01.Puntaje_Mes 	
+,T01.Puntos	
+,T01.Porc_Puntos	
+,T01.Limite_Superior	
+,T01.Limite_Inferior	
+,fec_actu	= GETDATE()
+,T01.CL_APLICA
+FROM [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING] T01
+LEFT JOIN (SELECT * FROM [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING] WHERE Id_Mes=@ID_MES_02) T02
+ON 
+	T01.id_indicador=T02.id_indicador
+AND T01.Id_Regional=T02.Id_Regional
+WHERE	T01.Id_Mes=@ID_MES_01
+	--AND T02.Id_Mes=@ID_MES_02
+AND T02.id_indicador IS NULL
+
+
+
+/*		CALIDAR LA INSERCION ANTERIOR		*/
+SELECT * FROM [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING] WHERE
+Id_Mes=202606	
+AND Id_Regional	= 8 
+AND id_indicador IN(51,41)
+--AND id_indicador IN(41,51)
+
+
+
+---BACKUP POR SI ALGO FALLA
+----SELECT * 
+----INTO [TMP_BORRAR].[dbo].[FACT_INDICADORES_RANKING_BK20260420_1204]
+----FROM [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING] T01
+
+
+SELECT COUNT(1) FROM [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING] WHERE Id_Mes=202608
+SELECT COUNT(1) FROM [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING] WHERE Id_Mes=202609
+
+/*
+--BACKUP_20260508_VOLVER_A_EJECUTAR_POR_REPORCESO_PERIODO_202601
+SELECT * 
+INTO [TMP_BORRAR].[dbo].[FACT_INDICADORES_RANKING_BACKUP_20260511_VOLVER_A_EJECUTAR_POR_REPORCESO_PERIODO_202602]
+FROM [COGNOS_STG_V3].[dbo].[FACT_INDICADORES_RANKING] 
+*/
+
+/******** Revisar el estado los periodos ejecutados **********/
+SELECT TOP (1000) [Id_Periodo]
+      ,[Estado_Proceso]
+  FROM [COGNOS_STG_V3].[dbo].[PRM_PROCESO_RAN]
+  where [Id_Periodo] >= 202601
+
+
+
+
+---

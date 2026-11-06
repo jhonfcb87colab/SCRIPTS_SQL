@@ -1,0 +1,209 @@
+use SIG_LOGISTICA_DM;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+DECLARE @PERIODO_EJECUCION INT = (SELECT TOP 1 MAX(PERIODO_EJECUCION)  FROM [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_OPERACION_MES] (NOLOCK)); 
+PRINT(@PERIODO_EJECUCION);
+----------------------->		VARIABLES POR AÑO		<----------------------------
+DECLARE @VALOR_COSTO_Aux_Camioneta INT = (SELECT MAX(VALOR) FROM [ACCES_DARWIN].dbo.Costo_Anual_rubro_auxiliar_dia (NOLOCK) WHERE ATRIBUTO='VALOR_COSTO_Aux_Camioneta' AND PERIODO=@PERIODO_EJECUCION );
+DECLARE @VALOR_COSTO_Currier_Moto INT = (SELECT MAX(VALOR) FROM [ACCES_DARWIN].dbo.Costo_Anual_rubro_auxiliar_dia (NOLOCK) WHERE ATRIBUTO='VALOR_COSTO_Currier_Moto' AND PERIODO=@PERIODO_EJECUCION ); --148000
+DECLARE @VALOR_COSTO_Aux_Cross INT= (SELECT MAX(VALOR) FROM [ACCES_DARWIN].dbo.Costo_Anual_rubro_auxiliar_dia (NOLOCK) WHERE ATRIBUTO='VALOR_COSTO_Aux_Cross' AND PERIODO=@PERIODO_EJECUCION );
+DECLARE @VALOR_KM_HORA_URBANO INT = (SELECT MAX(VALOR) FROM [ACCES_DARWIN].dbo.Costo_Anual_rubro_auxiliar_dia (NOLOCK) WHERE ATRIBUTO='VALOR_KM_HORA_URBANO' AND PERIODO=@PERIODO_EJECUCION );
+
+----------------------->		CONSTANTES				<----------------------------
+DECLARE @VALOR_Costo_Co_Sourcing_Operativos_111 BIGINT = 1111111111 ; 
+DECLARE @VALOR_Costo_Co_Sourcing_Operativos_222 BIGINT = 2222222222 ; 
+DECLARE @VALOR_Costo_Co_Sourcing_Operativos_333 BIGINT = 3333333333 ; 
+DECLARE @VALOR_Costo_Co_Sourcing_Operativos_131 BIGINT = 1313131313 ; 
+DECLARE @VALOR_Costo_Co_Sourcing_Operativos_101 BIGINT = 1010101010 ; 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT top 100000
+PLACA_VEHICULO_DOCU
+,TMP01.[TOTAL_PIEZAS_OPERA_DISTRIBUCION] 
+,TMP01.[TOTAL_PIEZAS_OPERA_DEVOLUCION]
+,COSTO_FINAL_POR_MODELO =
+    CASE
+        -- 1. Modelos CDS PPES (0)
+        WHEN TMP01.[MODELOS_DE_CONTRATACION_FLOTA] = 0 THEN
+            CASE
+                WHEN TMP01.[ID_PROCESO] IN (5, 6) THEN TMP01.[COMISION_RECOLECCION_EMPRESARIO]
+                WHEN TMP01.[ID_PROCESO] IN (9, 24) THEN TMP01.[COMISION_DISTRIBUCION_EMPRESARIO]
+                ELSE  0
+            END
+ 
+        -- 2. Modelo Insourcing (1)
+       
+        WHEN TMP01.[MODELOS_DE_CONTRATACION_FLOTA] = 1 THEN
+            CASE
+                WHEN 
+				IIF( [MODELOS_DE_CONTRATACION_FLOTA]<>1,'NO APLICA',
+										IIF([MODELOS_DE_CONTRATACION_FLOTA]<>1, 'NO APLICA',
+											IIF(TPPLCPRP.[TIPO DE VEHICULO] IS NULL,
+											'SIN INFORMACION',
+											TPPLCPRP.[TIPO DE VEHICULO])))	
+				= 'SIN INFORMACION'
+                THEN @VALOR_Costo_Co_Sourcing_Operativos_101
+                ELSE TMP01.[KM_INSOURCING] * TMP01.[COSTO_KM_IN_SOURCING]
+            END
+ 
+        -- 3. Modelo Co-Sourcing (2) -
+        WHEN TMP01.[MODELOS_DE_CONTRATACION_FLOTA] = 2 THEN
+            COALESCE(
+                Fl_Opera_placa.[Costo_Co-Sourcing_Operativos] /*AS Costo_Co_Sourcing_Operativos*/,
+                Fl_Zona_placa.[Costo_Co-Sourcing_Zonas] /*AS Costo_Co_Sourcing_Zonas*/,
+                @VALOR_Costo_Co_Sourcing_Operativos_222
+            )
+ 
+        -- 4. FModelo Out-Sourcing (3)
+        WHEN TMP01.[MODELOS_DE_CONTRATACION_FLOTA] = 3 THEN
+            ISNULL(VW_3C_Costo_Flete.[Costo Promedio Flete Año Actual] /*AS [Costo_Promedio_Flete_Año_Actual]*/, @VALOR_Costo_Co_Sourcing_Operativos_333)
+        
+		-- 5. MODELOS POR PRODUCTIVIDAD PXP - VALOR FIJO y POR RANGO(4, 5) 
+        WHEN  TMP01.[MODELOS_DE_CONTRATACION_FLOTA] IN (4, 5) AND TMP01.[ID_PROCESO] = 24 THEN 
+				----(select [ACCES_DARWIN].[PAR].[VW_COSTOS_DARWIN_CALCULAR_Tarifas_Productos_POR_PLACA_PXP_MODELO_CTR_4_5]('SEK892',1))
+				[ACCES_DARWIN].[PAR].[VW_COSTOS_DARWIN_CALCULAR_Tarifas_Productos_POR_PLACA_PXP_MODELO_CTR_4_5](TMP01.PLACA_VEHICULO_DOCU,														 ---@PLACA,
+																									(TMP01.[TOTAL_PIEZAS_OPERA_DISTRIBUCION] - TMP01.[TOTAL_PIEZAS_OPERA_DEVOLUCION])----@ID_CANT
+				)
+		WHEN  TMP01.[MODELOS_DE_CONTRATACION_FLOTA] IN (4, 5) AND TMP01.[ID_PROCESO] in (5,6)  THEN 																									
+		            IIF (  (
+						SELECT TOP 1  isnull([TARIFA_X_RECOLECCION],0)
+								  FROM [ACCES_DARWIN].[dbo].[BASE_PLACAS_PXP] WITH(NOLOCK)
+								  WHERE [PLACA]=TMP01.PLACA_VEHICULO_DOCU
+					   )>1,
+						(SELECT TOP 1  isnull([TARIFA_X_RECOLECCION],0)
+								  FROM [ACCES_DARWIN].[dbo].[BASE_PLACAS_PXP] WITH(NOLOCK)
+								  WHERE [PLACA]=TMP01.PLACA_VEHICULO_DOCU)					   
+					   ,500) * TMP01.[TOTAL_PIEZAS_OPERA_RECOLECCION]
+
+
+		-- 5. MODELOS POR PRODUCTIVIDAD PXP - CONSOLIDADORES (4, 5, 6, 14, 15, 17)
+		WHEN TMP01.[MODELOS_DE_CONTRATACION_FLOTA] IN (4, 5, 6)
+             OR (TMP01.[MODELOS_DE_CONTRATACION_FLOTA] IN (14, 15, 17) AND TMP01.[ID_PROCESO] = 24)
+        THEN
+            [ACCES_DARWIN].[PAR].[VW_COSTOS_DARWIN_CALCULAR_Tarifas_Productos_Por_Periodo](
+                  TMP01.[PERIODO_EJECUCION]
+                , TMP01.[MODELOS_DE_CONTRATACION_FLOTA]
+                , TMP01.ID_REGIONAL
+                , TMP01.[ID_PROCESO]
+                , TMP01.ID_PRODUCTO_CST
+                , (TMP01.[TOTAL_GUIAS_DISTRIBUCION] - TMP01.[TOTAL_DEVOLUCIONES])
+            )
+ 
+        -- 6. Costos Fijos (7, 8, 9, 16)
+        WHEN TMP01.[MODELOS_DE_CONTRATACION_FLOTA] IN (7, 9, 16) THEN @VALOR_COSTO_Aux_Camioneta
+        WHEN TMP01.[MODELOS_DE_CONTRATACION_FLOTA] = 8 THEN @VALOR_COSTO_Currier_Moto
+ 
+        -- 7. CDS EMPRESARIO SATELITE (10)
+        WHEN TMP01.[MODELOS_DE_CONTRATACION_FLOTA] = 10 THEN
+            [COMISION_RECOLECCION_EMPRESARIO] + [COMISION_DISTRIBUCION_EMPRESARIO]
+ 
+        -- 8. COSTO OPERACION AEREA
+        WHEN TMP01.[MODELOS_DE_CONTRATACION_FLOTA] = 11 THEN
+            CASE
+                WHEN CT_RA.VR_KILO_Y_CORTE_GUIA IS NULL THEN @VALOR_Costo_Co_Sourcing_Operativos_111
+                ELSE (CT_RA.VR_KILO_Y_CORTE_GUIA * TMP01.[PESO_FISICO_OPERA_DISTRIBUCION])
+            END
+ 
+        -- Default General
+        ELSE @VALOR_Costo_Co_Sourcing_Operativos_131
+    END
+,TMP01.[MODELOS_DE_CONTRATACION_FLOTA]
+,TMP01.[ID_PROCESO] 
+,TMP01.[COMISION_RECOLECCION_EMPRESARIO]
+,TMP01.[COMISION_DISTRIBUCION_EMPRESARIO]
+,TMP01.[MODELOS_DE_CONTRATACION_FLOTA] 
+,[MODELOS_DE_CONTRATACION_FLOTA]
+,TPPLCPRP.[TIPO DE VEHICULO] 
+,TPPLCPRP.[TIPO DE VEHICULO]
+,TMP01.[KM_INSOURCING] 
+,TMP01.[COSTO_KM_IN_SOURCING]
+,Fl_Opera_placa.[Costo_Co-Sourcing_Operativos] AS Costo_Co_Sourcing_Operativos
+,Fl_Zona_placa.[Costo_Co-Sourcing_Zonas] AS Costo_Co_Sourcing_Zonas
+,VW_3C_Costo_Flete.[Costo Promedio Flete Año Actual] AS [Costo_Promedio_Flete_Año_Actual]
+,@VALOR_Costo_Co_Sourcing_Operativos_111 as [@VALOR_Costo_Co_Sourcing_Operativos_111]
+,@VALOR_Costo_Co_Sourcing_Operativos_101 as [@VALOR_Costo_Co_Sourcing_Operativos_101]
+,@VALOR_Costo_Co_Sourcing_Operativos_222 as [@VALOR_Costo_Co_Sourcing_Operativos_222]
+,@VALOR_Costo_Co_Sourcing_Operativos_333 as [@VALOR_Costo_Co_Sourcing_Operativos_333]
+,@VALOR_COSTO_Aux_Camioneta as [@VALOR_COSTO_Aux_Camioneta]
+,@VALOR_COSTO_Currier_Moto as [@VALOR_COSTO_Currier_Moto] 
+,@VALOR_Costo_Co_Sourcing_Operativos_131 as [@VALOR_Costo_Co_Sourcing_Operativos_131]
+,[COMISION_RECOLECCION_EMPRESARIO+COMISION_DISTRIBUCION_EMPRESARIO] = [COMISION_RECOLECCION_EMPRESARIO] + [COMISION_DISTRIBUCION_EMPRESARIO]
+,CT_RA.VR_KILO_Y_CORTE_GUIA 
+,[VR_KILO_Y_CORTE_GUIA * PESO_FISICO_OPERA_DISTRIBUCION]  = CT_RA.VR_KILO_Y_CORTE_GUIA * TMP01.[PESO_FISICO_OPERA_DISTRIBUCION]
+,TMP01.[PERIODO_EJECUCION]
+,TMP01.[MODELOS_DE_CONTRATACION_FLOTA]
+,TMP01.ID_REGIONAL
+,TMP01.[ID_PROCESO]
+,TMP01.ID_PRODUCTO_CST
+,TMP01.[TOTAL_GUIAS_DISTRIBUCION] 
+,TMP01.[TOTAL_DEVOLUCIONES]
+,funcion_Productos_Por_Periodo =  [ACCES_DARWIN].[PAR].[VW_COSTOS_DARWIN_CALCULAR_Tarifas_Productos_Por_Periodo](
+										  TMP01.[PERIODO_EJECUCION]
+										, TMP01.[MODELOS_DE_CONTRATACION_FLOTA]
+										, TMP01.ID_REGIONAL
+										, TMP01.[ID_PROCESO]
+										, TMP01.ID_PRODUCTO_CST
+										, (TMP01.[TOTAL_GUIAS_DISTRIBUCION] - TMP01.[TOTAL_DEVOLUCIONES])
+									)
+FROM FAC.COSTO_DARWIN_BASE_OPERACION_MES TMP01 WITH(NOLOCK)
+  LEFT JOIN [ACCES_DARWIN].[dbo].[VW_TIPOLOGIA_IN_SOURCING] TPLG (NOLOCK) ON TPLG.KeyModelo_Tipo=TMP01.KEY_IN_SOURCING
+LEFT JOIN [ACCES_DARWIN].[dbo].[BASE PLACAS PROPIAS] (NOLOCK) TPPLCPRP on TMP01.PLACA_VEHICULO_DOCU=TPPLCPRP.PLACA
+LEFT JOIN [ACCES_DARWIN].DBO.VW_COSOURCING4C_Costos_Fletes_Zonas_Por_Placa Fl_Zona_placa (NOLOCK) ON Fl_Zona_placa.Placa=TMP01.PLACA_VEHICULO_DOCU
+LEFT JOIN [ACCES_DARWIN].DBO.VW_COSOURCING2C_Costos_Fletes_Operativos_Por_Placa Fl_Opera_placa ON Fl_Opera_placa.Placa=TMP01.PLACA_VEHICULO_DOCU
+LEFT JOIN [ACCES_DARWIN].[dbo].[VW_3C_Costo_Flete_Por_Placa_Promedio_Año_Actual] VW_3C_Costo_Flete (NOLOCK) ON VW_3C_Costo_Flete.PLACA=TMP01.PLACA_VEHICULO_DOCU
+LEFT JOIN [ACCES_DARWIN].[dbo].[COSTO POR RUTA AEREA] CT_RA (NOLOCK) ON CT_RA.KEY_ORIGEN_DESTINO_AEREO=TMP01.[LLAVE_ORIGEN_DESTINO] AND [MODELOS_DE_CONTRATACION_FLOTA]=11 AND TMP01.ID_PROCESO=12 AND  CT_RA.PERIODO_ID=TMP01.PERIODO_EJECUCION
+ WHERE TMP01.PERIODO_EJECUCION =202511
+ AND TMP01.[MODELOS_DE_CONTRATACION_FLOTA] IN (4, 5)
+--and TMP01.PLACA_VEHICULO_DOCU = 'WNN969'
+and TMP01.ID_PROCESO IN(5,6)
+option(recompile)
+
+
+
+
+--SELECT TOP 100 *  FROM FAC.COSTO_DARWIN_BASE_OPERACION_MES TMP01 WITH(NOLOCK)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

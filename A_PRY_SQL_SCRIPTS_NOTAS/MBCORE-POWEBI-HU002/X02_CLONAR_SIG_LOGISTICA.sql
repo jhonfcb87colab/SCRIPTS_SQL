@@ -1,0 +1,192 @@
+
+
+
+
+/****** 
+							SIG_COL_LOGISTICA_DW    ------->    PIVOTE EXTRACCION DE GUIAS  A TABLAS FAC
+******/
+
+USE [SIG_COL_LOGISTICA_DW]
+GO
+
+DROP TABLE IF EXISTS [TMP].[MBCORE_GUIAS];
+
+USE [SIG_LOGISTICA_DM]
+GO
+
+DROP TABLE IF EXISTS [TMP].[MBCORE_BODEGAS];
+DROP TABLE IF EXISTS [TMP].[MBCORE_GUIAS];
+DROP TABLE IF EXISTS [FAC].[MBCORE_GUIAS];
+
+
+
+
+USE [SIG_COL_LOGISTICA_DW]
+GO
+
+/****** Object:  Table [TMP].[MBCORE_GUIAS]    Script Date: 15/09/2022 9:36:13 a.m. ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [TMP].[MBCORE_GUIAS](
+	[G_NUMERO_GUIA] [numeric](20, 0) NOT NULL
+) ON [PRIMARY]
+GO
+
+
+
+/****** 
+							SIG_LOGISTICA_DM    ------->    PIVOTE PARA CARGA INCREMENTAL
+******/
+
+USE [SIG_LOGISTICA_DM]
+GO
+
+/****** Object:  Table [FAC].[MBCORE_GUIAS]    Script Date: 15/09/2022 9:40:03 a.m. ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [FAC].[MBCORE_GUIAS](
+	[GUIA] [numeric](20, 0) NULL,
+	[TIME_ID] [int] NULL,
+	[FECHA_INICIO] [varchar](30) NULL,
+	[NUMERO_PIEZAS] [int] NULL,
+	[TIEMPO_ENTREGA] [int] NULL,
+	[NOMBRE_TIEMPO_ENTREGA] [varchar](50) NULL,
+	[ID_PRODUCTO] [int] NULL,
+	[PRODUCTO] [varchar](50) NULL,
+	[DIRECCION_DESTINO] [varchar](400) NULL,
+	[ID_CIUDAD_ORIGEN] [int] NULL,
+	[CIUDAD_ORIGEN] [varchar](50) NULL,
+	[DEPARTAMENTO_ORIGEN] [varchar](50) NULL,
+	[REGIONAL_ORIGEN] [varchar](50) NULL,
+	[ID_CIUDAD_DESTINO] [int] NULL,
+	[CIUDAD_DESTINO] [varchar](50) NULL,
+	[DEPARTAMENTO_DESTINO] [varchar](50) NULL,
+	[REGIONAL_DESTINO] [varchar](50) NULL,
+	[ID_CLIENTE] [varchar](20) NULL,
+	[NOMBRE_CLIENTE] [varchar](100) NULL,
+	[ID_ESTADO_ENVIO] [int] NULL,
+	[ESTADO_ENVIO] [varchar](50) NULL,
+	[ID_PAIS_UBICACION] [int] NULL,
+	[ID_CIUDAD_UBICACION] [int] NULL,
+	[ID_DIVISION_UBICACION] [int] NULL,
+	[VALOR_DECLARADO] [float] NULL,
+	[ID_BODEGA_ULTM_MOVI] [varchar](100) NULL,
+	[CANAL] [varchar](50) NULL,
+	[ID_CIUDAD_CANAL_ORIGEN] [int] NULL,
+	[CIUDAD_CANAL_ORIGEN] [varchar](50) NULL,
+	[DEPARTAMENTO_CANAL_ORIGEN] [varchar](50) NULL,
+	[REGIONAL_CANAL_ORIGEN] [varchar](50) NULL,
+	[ID_CIUDAD_CANAL_DESTINO] [int] NULL,
+	[CIUDAD_CANAL_DESTINO] [varchar](50) NULL,
+	[DEPARTAMENTO_CANAL_DESTINO] [varchar](50) NULL,
+	[REGIONAL_CANAL_DESTINO] [varchar](50) NULL,
+	[SE_ID_FECHA_EZU] [int] NULL,
+	[SE_FECHA_EZU] [varchar](30) NULL,
+	[SE_ID_FECHA_ULTI_MOVI] [int] NULL,
+	[SE_FECHA_ULTI_MOVI] [varchar](30) NULL,
+	[SE_CANT_SZU] [int] NULL,
+	[SE_ID_FECHA_SZU] [int] NULL,
+	[SE_FECHA_SZU] [varchar](30) NULL,
+	[SE_ID_CONC_SZU] [int] NULL,
+	[SE_CONC_SZU] [varchar](50) NULL,
+	[SE_ID_CANT_DZU] [int] NULL,
+	[SE_ID_ULTI] [int] NULL,
+	[SE_ID_SZU] [varchar](2) NULL,
+	[ID_CIUDAD_ULTI_MOVI] [int] NULL,
+	[CIUDAD_ULTI_MOVI] [varchar](50) NULL,
+	[DEPTARTAMENTO_ULTI_MOVI] [varchar](50) NULL,
+	[REGIONAL_ULTI_MOVI] [varchar](50) NULL,
+	[ID_ZONA] [varchar](20) NULL,
+	[PROCESO_ULTI_MOVI] [varchar](50) NULL,
+	[CONCECUTIVO_ULTI_MOVI] [varchar](50) NULL,
+	[BODEGA_ULTM_MOVI] [varchar](50) NULL,
+	[ID_TIPO_TRAYECTO] [varchar](50) NULL,
+	[TIPO_TRAYECTO] [varchar](50) NULL,
+	[ID_CONFIRMACION] [varchar](20) NULL,
+	[CANT_CONFIRMACION] [int] NULL,
+	[CONFIRMACION_SOLUCION_1] [varchar](150) NULL,
+	[CONFIRMACION_SOLUCION_2] [varchar](150) NULL,
+	[CONFIRMACION_SOLUCION_3] [varchar](150) NULL,
+	[DEVOLUCION_1] [varchar](50) NULL,
+	[DEVOLUCION_2] [varchar](50) NULL,
+	[DEVOLUCION_3] [varchar](50) NULL,
+	[NOVEDAD_OPERATIVA_1] [varchar](150) NULL,
+	[NOVEDAD_OPERATIVA_2] [varchar](150) NULL,
+	[NOVEDAD_OPERATIVA_3] [varchar](150) NULL,
+	[ENVIO_TAREA] [varchar](20) NULL,
+	[ESTADO_TAREA] [varchar](50) NULL,
+	[ID_PROC_ULTI_MOVI] [int] NULL,
+	[ID_CONC_ULTI_MOVI] [int] NULL,
+	[PESO_FISICO_R] [numeric](18, 0) NULL,
+	[PESO_FISICO_E] [numeric](18, 0) NULL,
+	[TELEFONO_DESTINATARIO] [varchar](20) NULL,
+	[REGIMEN] [varchar](20) NULL,
+	[ESTADOFISICO] [varchar](40) NULL,
+	[FECHA_BOD_Rezagos] [datetime] NULL,
+	[FECHA_BOD_Compensaciones] [datetime] NULL,
+	[Numero_veces_compensaicones] [int] NULL,
+	[Numero_veces_rezagos] [int] NULL,
+	[Numero_piezas_rezagos] [int] NULL,
+	[Numero_piezas_compensacion] [int] NULL,
+	[ID_ESTADO_INDEMNIZACION] [int] NULL,
+	[ESTADO_INDEMNIZACION] [varchar](100) NULL,
+	[DURACION_COMPENSACIONES] [float] NULL,
+	[DURACION_REZAGOS] [float] NULL,
+	[VALIDACION_SE_FECHA_ULTI_MOVI] [varchar](30) NULL,
+	[VALIDACION_G_ID_FECHA] [datetime] NULL,
+	[VEJEZ_DESDE_INICIO] [float] NULL,
+	[FECHA_EXTRACCION_DM] [datetime] NULL,
+	[CUN] [numeric](20, 0) NULL,
+	[Nombre_destinatario] [varchar](60) NULL,
+	[TIPO_COBRO] [varchar](50) NULL,
+	[VALOR_RECAUDAR] [real] NULL,
+	[ESTADO_RECAUDO] [varchar](20) NULL,
+	[ENVIOA_A_PQR] [varchar](20) NULL,
+	[ESTADO_PQR] [varchar](50) NULL,
+	[FECHA_DIGITALIZACION] [datetime] NULL,
+	[ESTADO_GUIA_DITALIZACION] [varchar](40) NULL,
+	[ID_CLIENTE_PROVISION] [varchar](100) NULL,
+	[NOMBRE_CLIENTE_PROVISION] [varchar](200) NULL,
+	[CR_BODEGA_UBICACION] [varchar](50) NULL,
+	[CR_REGIONAL_UBICACION] [varchar](50) NULL
+) ON [PRIMARY]
+GO
+
+USE [SIG_LOGISTICA_DM]
+GO
+
+/****** Object:  Table [TMP].[MBCORE_GUIAS]    Script Date: 15/09/2022 9:40:18 a.m. ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [TMP].[MBCORE_GUIAS](
+	[G_NUMERO_GUIA] [numeric](20, 0) NULL
+) ON [PRIMARY]
+GO
+
+USE [SIG_LOGISTICA_DM]
+GO
+
+/****** Object:  Table [TMP].[MBCORE_BODEGAS]    Script Date: 15/09/2022 10:24:38 a.m. ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [TMP].[MBCORE_BODEGAS](
+	[G_NUMERO_GUIA] [numeric](20, 0) NULL
+) ON [PRIMARY]
+GO
+

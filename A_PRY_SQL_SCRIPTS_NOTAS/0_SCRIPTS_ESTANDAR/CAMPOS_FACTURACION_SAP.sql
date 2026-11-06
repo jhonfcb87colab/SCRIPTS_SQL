@@ -1,0 +1,77 @@
+/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT TOP (1000) 
+		CONVERT(DATETIME,[ID_FECHA]) AS [FECHA]
+      ,[MANDT]
+      ,[KOKRS]
+      ,[VBELN]
+      ,[BSTKD]
+      ,[ERDAT_P]
+      ,[ERZET_P]
+      ,[ERNAM_P]
+      ,[AUART]
+      ,[WAERK]
+      ,[VKORG]
+      ,[VTWEG]
+      ,[SPART]
+      ,[KUNNR]
+      ,[LAND1]
+      ,[CODSER]
+      ,[NAME1]
+      ,[NAME2]
+      ,[ORT01]
+      ,[PSTLZ]
+      ,[REGIO]
+      ,[SORTL]
+      ,[STRAS]
+      ,[TELF1]
+      ,[TELFX]
+      ,[ANRED]
+      ,[ORT02]
+      ,[PFACH]
+      ,[FITYP]
+      ,[STCDT]
+      ,[VBELN_P]
+      ,[POSNR]
+      ,[FKIMG]
+      ,[MEINS]
+      ,[MATNR]
+      ,[SAKN1]
+      ,[ARKTX]
+      ,[KTGRM]
+      ,[ERNAM]
+      ,[ERDAT]
+      ,[ERZET]
+      ,[PRCTR]
+      ,[PERNR]
+      ,[NETWR]
+      ,[PR00]
+      ,[ZDES]
+      ,[MWST]
+      ,[ZCRE]
+      ,[JIW4]
+      ,[ZI]
+      ,[JIW2]
+      ,[JIW3]
+      ,[JIW5]
+      ,[ZMOV]
+      ,[BILL_O]
+      ,[ANU]
+      ,[AUGRU]
+      ,[BEZEI]
+      ,[RFWRTAN]
+      ,[NC]
+      ,[RFWRTNC]
+      ,[BSTKD_E]
+      ,[IHREZ]
+  FROM [SIG_FACTURACION_DM].[FAC].[AUCFAC_FACTURACION] WITH(NOLOCK)
+  WHERE YEAR(CONVERT(DATETIME,[ID_FECHA]))=2024
+
+
+
+
+  SELECT CONVERT(DATETIME,TIME_ID) AS TMFECH,* FROM SIG_COL_SAP_DW.DIM.TIEMPO WITH(NOLOCK) WHERE [YEAR]=2024
+
+  SELECT COUNT(1) FROM SIG_COL_SAP_DW.FAC.SAP_REPORTE_FACTURACION WITH(NOLOCK)
+    WHERE YEAR(CONVERT(DATETIME,TIME_ID_FACT))=2024
+
+

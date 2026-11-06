@@ -1,0 +1,267 @@
+<Batch xmlns='http://schemas.microsoft.com/analysisservices/2003/engine'>
+	<ErrorConfiguration xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+		<KeyErrorLimit>-1</KeyErrorLimit>
+		<KeyNotFound>IgnoreError</KeyNotFound>
+		<NullKeyNotAllowed>IgnoreError</NullKeyNotAllowed>
+	</ErrorConfiguration>
+	<Parallel>
+
+		<!-- ENVIOS MOVILIZADOS -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>ENVIOS MOVILIZADOS</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS 2025 02</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>ENVIOS MOVILIZADOS</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS 2025 01</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+		<!-- ENVIOS MOVILIZADOS CIUDAD DESTINO -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>Envios_Movilizados 1</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS 2025 02</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>Envios_Movilizados 1</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS 2025 01</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+		<!-- ENVIOS MOVILIZADOS CIUDAD ORIGEN -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>Envios_Movilizados</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS 2025 02</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>Envios_Movilizados</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS 2025 01</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+		<!-- ENVIOS MOVILIZADOS CLIENTE -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>Envios_Movilizados 2</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS 2025 02</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>Envios_Movilizados 2</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS 2025 01</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+		<!-- ENVIOS MOVILIZADOS CONTADOS -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>ENVIOS MOVILIZADOS CONTADOS</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS CONTADOS 2025 02</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>ENVIOS MOVILIZADOS CONTADOS</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS CONTADOS 2025 01</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+		<!-- ENVIOS MOVILIZADOS CONTADOS CDS -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>Envios_Movilizados_Contados</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS CONTADOS 2025 02</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>Envios_Movilizados_Contados</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS CONTADOS 2025 01</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+		<!-- GUIAS ENTREG TIEMPO PROMESA RED -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>GUIAS ENTREG TIEMPO PROMESA RED OPERATIVA</MeasureGroupID>
+				<PartitionID>GUIAS ENTREG TIEMPO PROMESA RED OPERATIVA 2025 02</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>GUIAS ENTREG TIEMPO PROMESA RED OPERATIVA</MeasureGroupID>
+				<PartitionID>GUIAS ENTREG TIEMPO PROMESA RED OPERATIVA 2025 01</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+		<!-- GUIAS MOVILIZADAS SIN FACTURAR -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>GUIAS MOVILIZADAS VS FACTURADAS</MeasureGroupID>
+				<PartitionID>GUIAS MOVILIZADAS VS FACTURADAS 2025 02</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>GUIAS MOVILIZADAS VS FACTURADAS</MeasureGroupID>
+				<PartitionID>GUIAS MOVILIZADAS VS FACTURADAS 2025 01</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+		<!-- MOVILIZADOS VS FACTURADOS -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>MOVILIZADOS VS FACTURADOS</MeasureGroupID>
+				<PartitionID>MOVILIZADOS VS FACTURADOS 2025 02</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>MOVILIZADOS VS FACTURADOS</MeasureGroupID>
+				<PartitionID>MOVILIZADOS VS FACTURADOS 2025 01</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>MOVILIZADOS VS FACTURADOS</MeasureGroupID>
+				<PartitionID>MOVILIZADOS VS FACTURADOS 2025 02</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>MOVILIZADOS VS FACTURADOS</MeasureGroupID>
+				<PartitionID>MOVILIZADOS VS FACTURADOS 2025 01</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+
+
+		<!--ENVIOS MOVILIZADOS COD CONTADOS  PROCESAMIENTO UNICO  -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>ENVIOS MOVILIZADOS COD</MeasureGroupID>
+				<PartitionID>ENVIOS MOVILIZADOS COD</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+		<!-- PROVISION GUIAS -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>PROVISION GUIAS</MeasureGroupID>
+				<PartitionID>PROVISION GUIAS</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+		<!-- GUIAS ENTREG TIEMPO PROMESA -->
+		<Process xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:ddl2='http://schemas.microsoft.com/analysisservices/2003/engine/2' xmlns:ddl2_2='http://schemas.microsoft.com/analysisservices/2003/engine/2/2' xmlns:ddl100_100='http://schemas.microsoft.com/analysisservices/2008/engine/100/100' xmlns:ddl200='http://schemas.microsoft.com/analysisservices/2010/engine/200' xmlns:ddl200_200='http://schemas.microsoft.com/analysisservices/2010/engine/200/200' xmlns:ddl300='http://schemas.microsoft.com/analysisservices/2011/engine/300' xmlns:ddl300_300='http://schemas.microsoft.com/analysisservices/2011/engine/300/300' xmlns:ddl400='http://schemas.microsoft.com/analysisservices/2012/engine/400' xmlns:ddl400_400='http://schemas.microsoft.com/analysisservices/2012/engine/400/400' xmlns:ddl500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500' xmlns:ddl500_500='http://schemas.microsoft.com/analysisservices/2013/engine/500/500'>
+			<Object>
+				<DatabaseID>SIG_COL_LOGISTICA</DatabaseID>
+				<CubeID>ENVIOS_MOVILIZADOS</CubeID>
+				<MeasureGroupID>GUIAS ENTREG TIEMPO PROMESA ENVIOS MOV</MeasureGroupID>
+				<PartitionID>GUIAS ENTREG TIEMPO PROMESA ENVIOS MOV</PartitionID>
+			</Object>
+			<Type>ProcessFull</Type>
+			<WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+		</Process>
+
+
+	</Parallel>
+</Batch>

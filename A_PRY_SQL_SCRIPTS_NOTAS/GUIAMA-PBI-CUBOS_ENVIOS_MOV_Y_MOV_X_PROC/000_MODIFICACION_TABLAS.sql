@@ -1,0 +1,113 @@
+
+USE SIG_COLOMBIA_DW;
+SELECT TOP 100 *
+FROM SCN.SERT_ENVIO SER_EV WITH(NOLOCK)
+
+
+
+/*
+
+Column_name	Type
+Ide_Envio	uniqueidentifier
+Est_Estado	varchar
+Est_Cancelacion	bit
+Num_Guia	numeric
+Num_Sobreporte	numeric
+Fec_Creacion	datetime
+Fec_CambioEstado	datetime
+Fec_TiempoEntrega	datetime
+Fec_ImpresionEnvio	datetime
+Doc_Relacionado	varchar
+Num_Piezas	smallint
+Des_TipoTrayecto	varchar
+Ide_Producto	smallint
+Ide_Destinatarios	uniqueidentifier
+Ide_CodFacturacion	char
+Ide_Manifiesto	uniqueidentifier
+Des_FormaPago	smallint
+Des_MedioTransporte	smallint
+Num_PesoTotal	decimal
+Num_ValorDeclaradoTotal	numeric
+Num_VolumenTotal	numeric
+Num_BolsaSeguridad	numeric
+Num_Precinto	numeric
+Des_Agente	varchar
+Des_TipoDuracionTrayecto	smallint
+Des_Telefono	varchar
+Des_Ciudad	int
+Des_Direccion	varchar
+Nom_Contacto	varchar
+Ide_SistemaCliente	varchar
+Des_VlrCampoPersonalizado1	varchar
+Des_VlrCampoPersonalizado2	varchar
+Num_ValorLiquidado	numeric
+Des_DiceContener	varchar
+Des_TipoGuia	smallint
+Est_Trazabilidad	smallint
+Des_OperadorLogistico	varchar
+Des_GuiaOperadorLogistico	varchar
+Id_Zonificacion	varchar
+Des_CiudadRemitente	int
+Des_OtraCiudad	varchar
+Num_VlrSobreflete	numeric
+Num_VlrFlete	numeric
+Num_Descuento	numeric
+Fec_Actualizacion	datetime
+Des_SIA	varchar
+Des_DireccionRecogida	varchar
+Des_TelefonoRecogida	varchar
+Des_CiudadRecogida	int
+Des_CodigoPostal	varchar
+idePaisOrigen	smallint
+idePaisDestino	smallint
+Des_IdArchivoOrigen	varchar
+Num_SincRastreo	int
+Ide_Num_Identific_Dest	varchar
+Ide_Num_Referencia_Dest	varchar
+Nom_Empresa_Dest	varchar
+Ide_Login	varchar
+Des_DireccionRemitente	varchar
+Est_Reimpresion	bit
+Num_Intentos	numeric
+Num_PesoFacturado	decimal
+Nom_TipoTrayecto	varchar
+Est_CanalMayorista	bit
+Nom_Remitente	varchar
+Num_IdentiRemitente	varchar
+Num_TelefonoRemitente	varchar
+Num_Recaudo	varchar
+Num_Factura	nchar
+Des_CorreoElectronico	varchar
+Num_Celular	varchar
+Ide_Transmitido	tinyint
+Fec_Transmision	datetime
+Id_ArchivoCargar	numeric
+Fec_EntregaProg	datetime
+Cod_Azteca	varbinary
+Cod_Barras	varchar
+Pre_Cerrado	bit
+Est_EnviarCorreo	bit
+Aplicacion	int
+VALOR_RECAUDAR_PRODUCTO	numeric
+NUMERO_CODIGO_EFECTY	varchar
+Fec_Envio	datetime
+Num_SobreCajaPorte	numeric
+Rem_CodigoPostal	varchar
+ID_CANAL_DISTRIBUCION	smallint
+ID_CASILLERO_POSTAL	smallint
+ID_CAUSAL_ANULACION	tinyint
+Nom_Remitente_X_Quien_Preguntar	varchar
+Num_Celular_Remitente	varchar
+Correo_Remitente	varchar
+Retorno_Digital	bit
+pago_datafono	bit
+Num_ValorDeclaradoTotalOriginal	numeric
+Codigos_Zona	varchar
+Id_formato_impresion	tinyint
+Id_formato_reimpresion	tinyint
+fecha_reimpresion	datetime
+
+
+
+
+*/

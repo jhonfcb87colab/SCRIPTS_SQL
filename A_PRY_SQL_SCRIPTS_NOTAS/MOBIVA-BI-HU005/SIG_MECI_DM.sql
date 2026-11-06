@@ -1,0 +1,9 @@
+--CONSULTAS DE PRUEBA 
+
+USE SIG_MECI_DM;
+
+
+
+
+
+---

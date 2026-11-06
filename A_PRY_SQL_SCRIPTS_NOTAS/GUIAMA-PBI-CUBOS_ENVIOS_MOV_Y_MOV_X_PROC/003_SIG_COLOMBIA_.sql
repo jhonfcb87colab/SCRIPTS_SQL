@@ -1,0 +1,8 @@
+use SIG_COLOMBIA_DW;
+SELECT TOP 10000
+G.NUMBER,
+I.DocumentRetailTypeId
+FROM [RTW].[GUIDE] G WITH(NOLOCK)
+LEFT JOIN [RTW].[Shipping] S WITH(NOLOCK) ON s.guideid=G.Id
+LEFT JOIN [RTW].[InvoiceDetail] I WITH(NOLOCK) ON G.InvoiceDetailId=I.InvoiceId
+WHERE G.DeliveryDate BETWEEN '2023-01-10' AND '2023-01-30'

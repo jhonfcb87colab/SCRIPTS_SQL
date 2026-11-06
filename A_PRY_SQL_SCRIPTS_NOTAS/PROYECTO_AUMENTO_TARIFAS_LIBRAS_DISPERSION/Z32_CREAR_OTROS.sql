@@ -1,0 +1,116 @@
+
+USE SIG_COL_LOGISTICA_DW_RK;
+
+
+/*
+USE SIG_COL_LOGISTICA_DW_RK;
+CREATE TABLE [FAC].[MOBIPETARIF_GUIAS](
+	[GUIA] [numeric](20, 0) NULL,
+	[ID_PRODUCTO] [int] NULL,
+	[PRODUCTO] [varchar](40) NULL,
+	[TIME_ID] [int] NULL,
+	[FECHA_ENVIO] [datetime] NULL,
+	[ID_TRAYECTO] [int] NULL,
+	[NOMBRE_TRAYECTO] [varchar](40) NULL,
+	[TIPO_PESO] [varchar](40) NULL,
+	[PESO_CONSOLIDADO] [numeric](18, 3) NULL,
+	[PESO_VOLUMETRICO] [numeric](18, 3) NULL,
+	[PESO_FISICO] [numeric](18, 3) NULL,
+	[ID_REGIONAL_ORIGEN] [int] NULL,
+	[REGIONAL_ORIGEN] [varchar](50) NULL,
+	[ID_CIUDAD_ORIGEN] [int] NULL,
+	[CIUDAD_ORIGEN] [varchar](50) NULL,
+	[ID_REGIONAL_DESTINO] [int] NULL,
+	[REGIONAL_DESTINO] [varchar](50) NULL,
+	[ID_CIUDAD_DESTINO] [int] NULL,
+	[CIUDAD_DESTINO] [varchar](50) NULL,
+	[CANAL] [varchar](9) NULL,
+	[FECHA_EXTRACCION] [datetime] NULL,
+	[VALOR_FACTURADO] [float] NULL,
+	[NUMERO_PIEZAS] numeric(20,0) null,
+	[PESO_FISICO_OPERA] numeric(38,3) null,
+	[PESO_VOLU_OPERA] numeric(38,3) null,
+	[PESO_FACTURADO] numeric(38,3) null,
+	[GUIA_MOVILIZADA] VARCHAR(6) null,
+	[ID_ESTADOGUIA] tinyint null,
+	[PESO_PIEZA] numeric(38,3) null,
+	[PESO_VOLU_PIEZA] numeric(38,3) null
+) ON [PRIMARY]
+GO
+
+*/
+
+
+
+
+
+
+
+
+
+--USE [SIG_COL_LOGISTICA_DW_RK]
+--GO
+
+--/****** Object:  Table [FAC].[MOBIPETARIF_GUIAS]    Script Date: 20/10/2022 10:49:58 p.m. ******/
+--SET ANSI_NULLS ON
+--GO
+
+--SET QUOTED_IDENTIFIER ON
+--GO
+
+--CREATE TABLE [FAC].[MOBIPETARIF_GUIAS](
+	[GUIA] [numeric](20, 0) NULL,
+	[ID_PRODUCTO] [int] NULL,
+	[PRODUCTO] [varchar](40) NULL,
+	[TIME_ID] [int] NULL,
+	[FECHA_ENVIO] [datetime] NULL,
+	[ID_TRAYECTO] [int] NULL,
+	[NOMBRE_TRAYECTO] [varchar](40) NULL,
+	[TIPO_PESO] [varchar](40) NULL,
+	[PESO_CONSOLIDADO] [numeric](18, 3) NULL,
+	[PESO_VOLUMETRICO] [numeric](18, 3) NULL,
+	[PESO_FISICO] [numeric](18, 3) NULL,
+	[ID_REGIONAL_ORIGEN] [int] NULL,
+	[REGIONAL_ORIGEN] [varchar](50) NULL,
+	[ID_CIUDAD_ORIGEN] [int] NULL,
+	[CIUDAD_ORIGEN] [varchar](50) NULL,
+	[ID_REGIONAL_DESTINO] [int] NULL,
+	[REGIONAL_DESTINO] [varchar](50) NULL,
+	[ID_CIUDAD_DESTINO] [int] NULL,
+	[CIUDAD_DESTINO] [varchar](50) NULL,
+	[CANAL] [varchar](9) NULL,
+	[FECHA_EXTRACCION] [datetime] NULL,
+	[VALOR_FACTURADO] [float] NULL,
+	[NUMERO_PIEZAS] [numeric](20, 0) NULL,
+	[PESO_FISICO_OPERA] [numeric](38, 3) NULL,
+	[PESO_VOLU_OPERA] [numeric](38, 3) NULL,
+	[PESO_FACTURADO] [numeric](38, 3) NULL,
+	[GUIA_MOVILIZADA] [varchar](6) NULL,
+	[ID_ESTADOGUIA] [tinyint] NULL,
+	[PESO_PIEZA] [numeric](38, 3) NULL,
+	[PESO_VOLU_PIEZA] [numeric](38, 3) NULL
+--) ON [PRIMARY]
+--GO
+
+--USE [SIG_COLOMBIA_DW]
+--GO
+
+--/****** Object:  Table [TMP].[MOBIPETARIF_PESO_SEGUIMIENTO_PIEZAS_MERC_INDUSTRIAL]    Script Date: 20/10/2022 10:51:36 p.m. ******/
+--SET ANSI_NULLS ON
+--GO
+
+--SET QUOTED_IDENTIFIER ON
+--GO
+
+--CREATE TABLE [TMP].[MOBIPETARIF_PESO_SEGUIMIENTO_PIEZAS_MERC_INDUSTRIAL](
+	[NUMERO_GUIA] [numeric](20, 0) NULL,
+	[FECHA_ENVIO] [datetime] NULL,
+	[NUMERO_PIEZAS] [smallint] NULL,
+	[ITEM_UNI_GUIA] [int] NULL,
+	[PESO_PIEZA] [numeric](38, 3) NULL,
+	[PESO_VOLU_PIEZA] [numeric](38, 3) NULL,
+	[PESO_PZA_CONSOLIDADO] [numeric](18, 0) NULL
+--) ON [PRIMARY]
+--GO
+
+

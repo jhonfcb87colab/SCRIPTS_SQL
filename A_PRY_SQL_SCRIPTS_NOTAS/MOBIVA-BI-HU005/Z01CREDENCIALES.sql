@@ -1,0 +1,23 @@
+USE SIG_COLOMBIA_DW;
+drop table if exists [PAR.].[CREDENCIALES]
+CREATE TABLE [PAR.].[CREDENCIALES](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[NOMBRE_SERVICIO] [varchar](150) NOT NULL,
+	[LINK] [nvarchar](max) NOT NULL,
+	[USUARIO] [varchar](150) NOT NULL,
+	[PASSWORD] [nvarchar](max) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+TRUNCATE TABLE [PAR.].[CREDENCIALES]
+GO
+SET IDENTITY_INSERT [PAR.].[CREDENCIALES] ON
+INSERT INTO [PAR.].[CREDENCIALES] ([ID], [NOMBRE_SERVICIO], [LINK], [USUARIO], [PASSWORD]) VALUES (1, N'CEBE', N'http://serv-erpsappr.servient.com.co:8000/sap/bc/rest/cebe/sd?sap-client=500', N'PEND', N'PEND')
+INSERT INTO [PAR.].[CREDENCIALES] ([ID], [NOMBRE_SERVICIO], [LINK], [USUARIO], [PASSWORD]) VALUES (2, N'FACTURACION', N'http://serv-erpsappr.servient.com.co:8000/sap/bc/rest/facturas/sd?sap-client=500', N'PEND', N'PEND')
+INSERT INTO [PAR.].[CREDENCIALES] ([ID], [NOMBRE_SERVICIO], [LINK], [USUARIO], [PASSWORD]) VALUES (3, N'CEBE', N'http://serv-erpsapqa.servient.com.co:8000/sap/bc/rest/cebe/sd?sap-client=500', N'PIAPPLUSER', N'D55QjAxobR4jquHhFmPVAw ==')
+INSERT INTO [PAR.].[CREDENCIALES] ([ID], [NOMBRE_SERVICIO], [LINK], [USUARIO], [PASSWORD]) VALUES (4, N'FACTURACION', N'http://serv-erpsapqa.servient.com.co:8000/sap/bc/rest/facturas/sd?sap-client=500', N'PEND', N'PEND')
+INSERT INTO [PAR.].[CREDENCIALES] ([ID], [NOMBRE_SERVICIO], [LINK], [USUARIO], [PASSWORD]) VALUES (5, N'MOBIVA SSFF', N'https://e10001-iflmap.hcisbt.us3.hana.ondemand.com/cxf/vacantes?wsdl', N'S0019922737', N'ln1ZuOxWN8JbuJphMuPzKA==')
+SET IDENTITY_INSERT [PAR.].[CREDENCIALES] OFF

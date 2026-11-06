@@ -1,0 +1,151 @@
+USE ACCES_DARWIN;
+
+
+/*
+
+
+/************************************************************************************************************************/
+/***********************************************ACTUALIZAR PARAMETRICAS**************************************************/
+/************************************************************************************************************************/
+/************************************************************************************************************************/
+DECLARE @PERIODO_ANTERIOR INT = 202506;
+DECLARE @PERIODO_NUEVO INT = 202507;
+/************************************************************************************************************************/
+/************************************************************************************************************************/
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[dbo].[COSTO POR RUTA AEREA] WHERE  PERIODO_ID=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[dbo].[COSTO POR RUTA AEREA]
+SELECT 
+CIUDAD_ORIGEN
+,CIUDAD_DESTINO
+,KEY_ORIGEN_DESTINO_AEREO
+,VALOR_KILO
+,VALOR_CORTE_GUIA
+,VR_KILO_Y_CORTE_GUIA
+,OBSERVACIONES
+,CALCULOS_ADICIONALES
+,PERIODO_ID=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[dbo].[COSTO POR RUTA AEREA] WHERE PERIODO_ID=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[dbo].[Costo_Anual_rubro_auxiliar_dia] WHERE  PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[dbo].[Costo_Anual_rubro_auxiliar_dia]
+SELECT 
+PERIODO=@PERIODO_NUEVO
+,ATRIBUTO
+,VALOR
+FROM [ACCES_DARWIN].[dbo].[Costo_Anual_rubro_auxiliar_dia] WHERE PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[dbo].[Tarifas_Productos_Por_Periodo] WHERE  PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[dbo].[Tarifas_Productos_Por_Periodo]
+SELECT 
+[KEY]
+,PERIODO=@PERIODO_NUEVO
+,ID_MODELO_CONTRATACION
+,ID_PROCESO_LOGISTICO
+,ID_PRODUCTO
+,DETALLE_OPERACION
+,VALOR
+FROM [ACCES_DARWIN].[dbo].[Tarifas_Productos_Por_Periodo] WHERE PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[PAR].[M_14_1_VALORES_DISTRIBUCION_DOCUMENTO_PXP] WHERE  ID_PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[PAR].[M_14_1_VALORES_DISTRIBUCION_DOCUMENTO_PXP]
+SELECT 
+REGIONAL_ID_TARIFA
+,DETALLE
+,VALOR
+,ID_PERIODO=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[PAR].[M_14_1_VALORES_DISTRIBUCION_DOCUMENTO_PXP] WHERE ID_PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[PAR].[M_14_1_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_PXP] WHERE  ID_PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[PAR].[M_14_1_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_PXP]
+SELECT 
+REGIONAL_ID_TARIFA
+,DETALLE
+,VALOR
+,ID_PERIODO=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[PAR].[M_14_1_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_PXP] WHERE ID_PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[PAR].[M_15_1_VALORES_DISTRIBUCION_DOCUMENTO_PXP_LODYTRANS] WHERE  ID_PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[PAR].[M_15_1_VALORES_DISTRIBUCION_DOCUMENTO_PXP_LODYTRANS]
+SELECT 
+REGIONAL_ID_TARIFA
+,DETALLE
+,VALOR
+,ID_PERIODO=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[PAR].[M_15_1_VALORES_DISTRIBUCION_DOCUMENTO_PXP_LODYTRANS] WHERE ID_PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[PAR].[M_15_2_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_PXP_LODYTRANS] WHERE  ID_PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[PAR].[M_15_2_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_PXP_LODYTRANS]
+SELECT 
+ID_REGIONAL_TARIFA
+,DETALLE
+,VALOR
+,ID_PERIODO=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[PAR].[M_15_2_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_PXP_LODYTRANS] WHERE ID_PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[PAR].[M_4_1_VALORES_DISTRIBUCION_DOCUMENTO_PXP] WHERE  ID_PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[PAR].[M_4_1_VALORES_DISTRIBUCION_DOCUMENTO_PXP]
+SELECT 
+REGIONAL_ID_TARIFA
+,DETALLE
+,VALOR
+,ID_PERIODO=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[PAR].[M_4_1_VALORES_DISTRIBUCION_DOCUMENTO_PXP] WHERE ID_PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[PAR].[M_4_2_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_PXP] WHERE  ID_PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[PAR].[M_4_2_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_PXP]
+SELECT 
+ID_REGIONAL_PXP_OTROSP
+,DETALLE
+,VALOR
+,ID_PERIODO=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[PAR].[M_4_2_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_PXP] WHERE ID_PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[PAR].[M_4_3_VALORES_RECOLECCION_DOCUMENTO] WHERE  ID_PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[PAR].[M_4_3_VALORES_RECOLECCION_DOCUMENTO]
+SELECT 
+ID_REGIONAL_PXP_DOCUMENTO
+,DETALLE
+,VALOR
+,ID_PERIODO=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[PAR].[M_4_3_VALORES_RECOLECCION_DOCUMENTO] WHERE ID_PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[PAR].[M_4_4_VALORES_RECOLECCION_OTROS_PRODUCTOS] WHERE  ID_PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[PAR].[M_4_4_VALORES_RECOLECCION_OTROS_PRODUCTOS]
+SELECT 
+ID_REGIONAL_PXP_OTROS_P
+,DETALLE
+,VALOR
+,ID_PERIODO=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[PAR].[M_4_4_VALORES_RECOLECCION_OTROS_PRODUCTOS] WHERE ID_PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[PAR].[M_5_1_VALORES_DISTRIBUCION_PXP_AUXILIAR] WHERE  ID_PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[PAR].[M_5_1_VALORES_DISTRIBUCION_PXP_AUXILIAR]
+SELECT 
+REGIONAL_ID_TARIFA_PXP_AUX
+,DETALLE
+,VALOR
+,ID_PERIODO=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[PAR].[M_5_1_VALORES_DISTRIBUCION_PXP_AUXILIAR] WHERE ID_PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[PAR].[M_6_1_VALORES_DISTRIBUCION_DOCUMENTO_RAPIGO] WHERE  ID_PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[PAR].[M_6_1_VALORES_DISTRIBUCION_DOCUMENTO_RAPIGO]
+SELECT 
+ID_REGIONAL_RAPIGO_DOC
+,DETALLE
+,VALOR
+,ID_PERIODO=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[PAR].[M_6_1_VALORES_DISTRIBUCION_DOCUMENTO_RAPIGO] WHERE ID_PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+DELETE [ACCES_DARWIN].[PAR].[M_6_2_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_RAPIGO] WHERE  ID_PERIODO=@PERIODO_NUEVO
+INSERT INTO [ACCES_DARWIN].[PAR].[M_6_2_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_RAPIGO]
+SELECT 
+ID_REGIONAL_RAPIGO_MERC
+,DETALLE
+,VALOR
+,ID_PERIODO=@PERIODO_NUEVO
+FROM [ACCES_DARWIN].[PAR].[M_6_2_VALORES_DISTRIBUCION_OTROS_PRODUCTOS_RAPIGO] WHERE ID_PERIODO=@PERIODO_ANTERIOR
+/************************************************************************************************************************/
+
+
+*/

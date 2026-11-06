@@ -1,0 +1,100 @@
+
+use SIG_COL_LOGISTICA_DW;
+
+SELECT TOP 1000
+NUMERO_GUIA,
+TIEMPO_OFERTA,
+TIEMPO_PROMESA_H,
+TIEMPO_PROMESA_CUMPLE_H,
+ID_RUTA
+FROM SIG_COL_LOGISTICA_DW.FAC.GUIAS_ENTREG_TIEMPO_PROMESA_RED_OPERATIVA WITH(NOLOCK)
+where TIEMPO_OFERTA is null
+
+
+
+SELECT distinct
+TIEMPO_OFERTA
+FROM SIG_COL_LOGISTICA_DW.FAC.GUIAS_ENTREG_TIEMPO_PROMESA_RED_OPERATIVA WITH(NOLOCK)
+where TIEMPO_OFERTA is null
+
+
+
+
+SELECT DISTINCT ID_ESTADOENVIO FROM SIG_COLOMBIA_DW.LOG.GUIAS WITH(NOLOCK)
+
+SELECT * FROM SIG_COLOMBIA_DW.PAR.ESTADOSENVIO
+
+
+SELECT * FROM SIG_COLOMBIA_DW.TMP.PROMESA_ND05 WITH(NOLOCK)
+
+
+
+USE SIG_COLOMBIA_DW;
+SELECT
+		      SE.NUMERO_GUIA
+			,ISNULL(CASE
+				WHEN (CONVERT(TIME(7),SE.FECHA_HORA_ENTRADA_CIL) > SE.HORA_CONTROL_MAXIMO_LLEGADA) AND (ND.ND_HORAS > 24)
+				THEN 36
+				WHEN (CONVERT(TIME(7),SE.FECHA_HORA_ENTRADA_CIL) > SE.HORA_CONTROL_MAXIMO_LLEGADA) AND (ND.ND_HORAS <= 24)
+				THEN 24
+			ELSE ND.ND_HORAS END,0) ND_HORAS				
+		FROM		
+		TMP.PROMESA_ND04 SE WITH(NOLOCK)		
+		INNER JOIN		
+		TMP.PROMESA_ND05_01 ND WITH(NOLOCK)		
+		ON
+			SE.[ID_PROCESO] = ND.[ID_PROCESO] AND
+			SE.[NUMERO_MOVIMI] = ND.[NUMERO_MOVIMI] AND
+			SE.[CONSECUT_MOVIMI] = ND.[CONSECUT_MOVIMI] AND
+			SE.[PLACA_VEHICULO_DOCU] = ND.[PLACA_VEHICULO_DOCU]
+		WHERE
+			SE.FECHA_HORA_ENTRADA_CIL IS NOT NULL
+
+
+
+
+
+
+SELECT TOP 1000 ID_TIEMPO,* FROM LOG.GUIAS WITH(NOLOCK)
+
+SELECT distinct ID_TIEMPO  FROM LOG.GUIAS WITH(NOLOCK)
+
+SELECT * FROM PAR.TIEMPOSENTREGA
+
+
+
+/*
+http://reporting.servientrega.com/reports/report/BIBI/
+http://reporting.servientrega.com/ReportServer?%2fBIBI%2fSIG_COL_LOGISTICA_DW%2fReports%2fGREEN_MOBILE&rs:Command=ListChildren
+
+"http://reporting.servientrega.com/ReportServer?%2fBIBI%2fSIG_COL_LOGISTICA_DW%2fReports%2fGREEN_MOBILE%2fReporteGMDistribucion&rs:Command=Render&rs:Format=EXCEL&ID_ANIO=" + [TIEMPO].[Año].CurrentMember.Member_Key + "&ID_MES=" + [TIEMPO].[MesDelAño].CurrentMember.Member_Key +  "&ID_DIA=" + [TIEMPO].[Dia].CurrentMember.Member_Key + "&ID_REG=" + [GM ZONA URBANA].[Nombre Regional].CurrentMember.Member_Key + "&ID_CIU=" + [GM ZONA URBANA].[Nombre Ciudad].CurrentMember.Member_Key + "&ID_ZON=" + [GM ZONA URBANA].[Nombre Zona Urba].CurrentMember.Member_Key + "&ID_TZON=" + [GM ZONA URBANA].[Nombre Tipo Zona Urba].CurrentMember.Member_key + "&ID_GRUPD=" + [GM HORA DISTRIBUCION].[GRUPO GESTION EN LINEA].CurrentMember.Member_key + "&ID_GRUEFC=" + [GM HORA DISTRIBUCION].[GRUPO EFECTIVIDAD].CurrentMember.Member_key
+
+"http://bopvsvwssrep03/ReportServer/Pages/ReportViewer.aspx?%2fBIBI%2fSIG_COL_LOGISTICA_DW%2fReports%2fGREEN_MOBILE%2fReporteGMDistribucion&rs:Command=Render&rs:Format=EXCEL&ID_ANIO=" + [TIEMPO].[Año].CurrentMember.Member_Key + "&ID_MES=" + [TIEMPO].[MesDelAño].CurrentMember.Member_Key +  "&ID_DIA=" + [TIEMPO].[Dia].CurrentMember.Member_Key + "&ID_REG=" + [GM ZONA URBANA].[Nombre Regional].CurrentMember.Member_Key + "&ID_CIU=" + [GM ZONA URBANA].[Nombre Ciudad].CurrentMember.Member_Key + "&ID_ZON=" + [GM ZONA URBANA].[Nombre Zona Urba].CurrentMember.Member_Key + "&ID_TZON=" + [GM ZONA URBANA].[Nombre Tipo Zona Urba].CurrentMember.Member_key + "&ID_GRUPD=" + [GM HORA DISTRIBUCION].[GRUPO GESTION EN LINEA].CurrentMember.Member_key + "&ID_GRUEFC=" + [GM HORA DISTRIBUCION].[GRUPO EFECTIVIDAD].CurrentMember.Member_key
+
+
+
+*/
+
+	SELECT
+		 MAX(ID_RUTA) ID_RUTA
+		,ID_CIUDAD_ORIGEN
+		,ID_CIUDAD_DESTINO
+		,ID_TIEMPO
+		,ID_MEDTRANS
+	FROM
+		DIM.RED_OPERATIVA_RUTA
+	WHERE
+		ID_ESTADO_RUTA = 1
+	GROUP BY
+		 ID_CIUDAD_ORIGEN
+		,ID_CIUDAD_DESTINO
+		,ID_TIEMPO
+		,ID_MEDTRANS
+
+
+
+
+
+
+		SELECT * FROM 	
+		DIM.RED_OPERATIVA_RUTA

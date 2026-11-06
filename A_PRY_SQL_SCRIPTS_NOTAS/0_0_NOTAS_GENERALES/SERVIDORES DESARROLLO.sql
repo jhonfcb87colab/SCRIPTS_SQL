@@ -1,0 +1,232 @@
+
+/*
+////VPN:
+https://186.145.7.101:10443/sslvpn/portal.html#!/
+https://186.145.7.101:10443/
+
+D_SERV-DBI01		10.10.72.37			USO DE PRONOSTICA
+D_SERV-DBI02		10.10.72.249		USO DE PRONOSTICA
+D_SERV-DBI03		10.10.70.172		USO DE PRONOSTICA
+T_SERV-DBI01		10.10.72.36			HOLMAN / JOHN CRUZ
+SERV-ETLBI01		10.10.2.57			USO MODELOS DE POWERBI
+SERV-BTASIG01		10.10.3.103			SERVIDOR VA PRUEBAS REPORTING REVICE
+T_SERV-DBIRPT01							AUDITORIA DE CUBOS  / YURI / PRONOSTICA
+T_SERV-DBICB01							YURI / PRONOSTICA
+
+
+
+PUERTAS DE ENLACE 
+SERV-POWERBI03   CLUSTER DIRECT QUERY   10.10.2.118  
+SERV-POWERBI01   CLUSTER DIRECT QUERY   10.10.2.111  
+SERV-POWERBI02   IMPORT QUERY           10.10.2.95
+
+
+*/
+--\SSISDB\DATA MART MECE\MEC_MIS_ENVIOS_CLIENTE\TRANSFORMACION_MEC_CLIENTES_REMITENTE.dtsx
+
+/*
+
+
+Dirección general : 
+MEPVSVWSSDGN01\DBDG001 
+LSTSSDGN
+ApplicationIntent=READONLY
+
+spbiExtraccionDocumentosCIL 
+
+
+CIL: 
+SERV-DBMCP 
+Mece_logistico 
+INTEGRACION CILES 
+INTEGRACION CILES 
+ 
+PARAMETROS 
+LSTSSMDM\MASTER
+ 
+
+Pruebas entrega Nacional
+PRUEBAS_ENTREGA
+SERVIDOR:SERV-DBSERVI01\SQL04
+BD: Pruebas_Entrega_Nacional
+
+
+SERVICE MANAGER 
+SERVIDOR  
+BASE DE DATOS 
+ESTADO 
+SERV-MDEBDDESK 
+10.140.78.61 
+SM 
+ONLINE 
+QSERV-DBHPDESK 
+10.10.70.85 
+SM 
+ONLINE 
+SERV-DBHPDESK 
+10.10.2.67 
+SM 
+OFFLINE 
+TSERV-DBHPDESK 
+10.10.70.62 
+usuario? 
+sqlbietlsm 
+SM 
+ONLINE 
+MEPVSVWSSSMG01\SM01 
+10.140.78.75 
+SM 
+ONLINE 
+
+ 
+BASE DE DATOS CADENA CREDITO 
+SERVIDOR  
+BASE DE DATOS 
+ESTADO 
+SERV-MDM\MASTER 
+10.140.79.50 
+MASTER 
+ONLINE 
+
+INSTANCIA 
+USR 
+PSW 
+PLATAFORMA PORTAL 
+SERV-TSYSTEMDB 
+Inteligencianegocios 
+usr_sig_Mece_logistico 
+Cogni@2018 
+usr_sig_Mece_logistico 
+TFS 
+SERV-DBSERVI01\SQL04 
+UsrSIG_ido 
+
+ 
+
+Pendiente (greenmobile) 
+Fact_Novedades_IDO   
+10.10.3.30,9989 
+ Usr_sig_helpdesk 
+******* 
+MESA DE AYUDA 
+10.10.3.30,9989 
+usr_sig_puntoservicio 
+******* 
+
+PUNTOS DE SERVICIO 
+T_SERV-DBDEV02\SQL2016 
+Usrwbsweb 
+Usrwbsweb 
+
+ 
+10.10.3.221,9971 
+SERV-BTDB2I-4\SQL04 
+usr_sig_prefacturacion 
+usr_sig_prefacturacion 
+MERF INGRESOS 
+SERV-BTADBC001 
+LSTSSDGN 
+Inteligencianegocios 
+usr_sig_Mece_logistico 
+Cogni@2018 
+usr_sig_Mece_logistico 
+Direccion_general:  
+ LSTSSRET\SQL03 SERVER 
+
+SERVER RETAILWEB: 
+LSTSSSIS\SQL05 
+
+SISCLINET 
+SERV-BTDB2I-4\SQL04 
+usr_sig_contados 
+usr_sig_contados 
+
+CONTADOS 
+10.10.3.218,9968 
+usr_sig_people 
+usr_sig_people 
+
+PEOPLE SOFT 
+10.10.3.220,9970 
+usr_sig_people 
+usr_sig_people 
+PEOPLE SOFT 
+
+10.10.3.226,9972 
+usr_sigsdm 
+******* 
+MASIVOS 
+SERVIDOR BASE DE DATOS RECOLECCIONES 
+SERV-DBDG001 = BOPVSVWSSDGN01\DBDG001 = LSTSSDGN 
+SERVIDOR INFORMACION SOFTWARE MAP INFO PRO  ZONAS GEOREFERENCIADAS 
+IP 10.10.2.18 = SOFTWARE MAP INFO PRO 
+
+BASE DE DATOS ZONAS GEOGRAFICAS (ODBC-POSTGRES) 
+Data Sources: PostgreSQL64 
+Database: Produccion 
+Server: 10.10.2.18 
+User Name: postgres 
+SSL Mode: disable 
+Port: 5432 
+Password: Servientrega2017 
+
+BASE DE DATOS CHAT BOTS  
+CHATBOT 
+SERV-MDEDB002 
+PSW:User_readChatBot 
+USR:User_readChatBot 
+
+ 
+BASE DE DATOS WBSD  
+LSTSSMDM\MATER 
+Usrwbsweb 
+
+BASE DE DATOS FACTURACION ELECTRONICA  
+LSTSSFACE 
+Db: FacturacionElectronica 
+
+BASE DE DATOS MECE_LOGISTICO_MASIVOS  
+10.10.3.226,9972 
+GREEN MOBILE 
+SERVIDOR: 
+LSTSSDGN 
+BASE DE DATOS: 
+Mece_Logistico 
+
+SERVIDOR: 
+LSTSSMDM\MASTER 
+BASE DE DATOS: 
+PARAMETROS 
+INSTANCIA DE DESARROLLO: PREFACTURACION RECAUDO CONTADOS Y LOGISTICA DE RECAUDO 
+T_SERV-DBDEV02\SQL2016_1 
+USR:      sismileniocentral 
+PSW:     sismileniocentral 
+
+DG_QA 
+T_SERV-DBDEV02\SQL2016_1 
+usr_sig_Mece_logistico 
+sismileniocentral 
+
+
+*/
+
+API SSFF
+SUCCESS FACTOR
+https://l10001-iflmap.hcisbp.us3.hana.ondemand.com/http/ConsultarDatosColaborador
+{
+  "cardType":"Cedula",
+  "nationalId":"80931909",
+  "country":"COL"
+}
+
+String username_CRE = "S0024637726";           
+String password_CRE = "G3st10nd3l40p3r4c10nDG"; 
+
+
+
+
+
+*/
+
+
+
