@@ -1,0 +1,217 @@
+
+
+
+
+Mi script original es el siguinete 
+
+ScriptCostosTrayecto_original.sql
+
+La parte que tendras que evalur es el codigo siguiente, no se le ha modigicado nada pero 
+
+Al evaluar, esta parte del codigo 
+
+-------------##################################### AJUSTES REGLAS DE NBEGOCIO   #####################################
+--1. sI TIENE ZONA Y NO TIERNE PLACA  ES OPERARDOR CLS (AFORADOR QUEMADO Y SE DEBE AJUSTAR EL NOMBRE ---> CASE MODELO CONTRATACION)
+--2. SI TIENE PLACA Y EN EL NOMBRE SERVICIO ES = (TRASNPORTE FLETE FIJO) EL MODELO DE COTRATACION VA A SER OUTSOURCING FLETE FIJO 
+--3.  SI TIENE PLACA Y EN EL NOMBRE SERVICIO ES <> (TRASNPORTE FLETE FIJO) EL MODELO DE COTRATACION VA A SER OUTSOURCING PXP 
+------------------------------------------------------------>nuevos ajustes
+-- =====================================================================
+-- Actualiza la tabla TMP con datos de liquidación (LIQ) según el guía
+-- y el proceso, y recalcula el costo final por modelo de contratación
+-- =====================================================================
+UPDATE TMP
+SET
+    -- 1) Copia directa del modelo de contratación de flota desde LIQ
+    TMP.MODELOS_DE_CONTRATACION_FLOTA = LIQ.MODELOS_DE_CONTRATACION_FLOTA,
+    -- 2) Copia el tipo de operador como "propietario del vehículo"
+    --    (se llena en dos columnas iguales: PROPIETARIO_VEHICULO y PROPIETARIO_VEHICULOF)
+    TMP.PROPIETARIO_VEHICULO  = LIQ.TIPO_OPERADOR,
+    TMP.PROPIETARIO_VEHICULOF = LIQ.TIPO_OPERADOR,
+    -- 3) Recalcula el costo final según el tipo de proceso (ID_PROCESO)
+    TMP.COSTO_FINAL_POR_MODELO =
+        CASE
+            -- Procesos 5 y 6 (recolección): tarifa x piezas recolectadas
+            WHEN TMP.ID_PROCESO IN (5, 6) THEN
+                LIQ.VALOR_TARIFA_SERVICIO * CONVERT(FLOAT, TMP.[TOTAL_PIEZAS_OPERA_RECOLECCION])
+            -- Proceso 9 (distribución): tarifa x (guías totales - devoluciones)
+            ----WHEN TMP.ID_PROCESO = 9 AND LIQ.MODELOS_DE_CONTRATACION_FLOTA NOT IN (12,15) THEN
+            ----    LIQ.VALOR_TARIFA_SERVICIO * (CONVERT(FLOAT, TMP.[TOTAL_GUIAS]) - CONVERT(FLOAT, TMP.[TOTAL_DEVOLUCIONES]))
+			WHEN   TMP.ID_PROCESO = 9 THEN ---AND LIQ.MODELOS_DE_CONTRATACION_FLOTA IN (12,15) THEN
+			    LIQ.VALOR_TARIFA_SERVICIO * (CONVERT(FLOAT, TMP.[TOTAL_PIEZAS_OPERA_DISTRIBUCION]) - CONVERT(FLOAT, TMP.[TOTAL_PIEZAS_OPERA_DEVOLUCION]))  
+
+                -- Nota: fórmula alternativa (piezas en vez de guías), queda documentada
+                -- pero no se usa: (TOTAL_PIEZAS_OPERA_DISTRIBUCION - TOTAL_PIEZAS_OPERA_DEVOLUCION)
+            -- Cualquier otro proceso: no se toca, se conserva el valor actual
+            ELSE
+                TMP.COSTO_FINAL_POR_MODELO
+        END
+FROM [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_OPERACION_MES_BASE01_V02] AS TMP
+INNER JOIN [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_GUIAS_LIQUIDACION_PXP_AFOROS] AS LIQ
+    ON LIQ.NUMERO_GUIA  = TMP.NUMERO_GUIA                                    -- mismo número de guía
+    AND LIQ.ID_PROCESO  = TMP.ID_PROCESO                                     -- mismo proceso
+    AND CONVERT(DATE, TMP.FECHA_HORA_MOVIMIENTO) = CONVERT(DATE, LIQ.FECHA_HORA_MOVIMIENTO); -- mismo día de movimiento
+ 
+
+El costo final por trayecto me lo esta calculado muy elevado; este reaultado lo realice transformando el update en un SELECT  y las pruebas que he ido realizando estan en este archivo "Script_Primera_Version.sql", por lo que me genero este resultado  
+
+MODELOS_DE_CONTRATACION_FLOTA	PROPIETARIO_VEHICULO	PROPIETARIO_VEHICULOF	COSTO_FINAL_POR_MODELO
+3	                            OUTSOURCING FLETE FIJO	OUTSOURCING FLETE FIJO	14543812,8
+
+
+
+
+
+Al dejar el calculo original si hacer el UPDATE, el calculo de COSTO FINAL POR MODELO lo calcula bien 
+
+NUMERO_GUIA	NUMERO_PIEZAS	ID_PROCESO	ID_PRODUCTO	    PROPIETARIO_VEHICULO	PLACA_VEHICULO_DOCU	COSTO_FINAL_POR_MODELO
+2292411506	    59	            9	        6	        SALIDA A ZONA URBANA	    KPP727	                229512
+2292411506	    59	            24	        6	        REPORTADO ENTREGADO	        KPP727	                229512
+2292411506	    59	            6	        6	        ENTRADA DE ZONA URBANA	    TKF926	                144495
+2292411506	    59	            12	        6	        SALIDA A REGIONAL	        TSW967	                2573358
+2292411506	    59	            12	        6	        SALIDA A REGIONAL	        VEP020	                291259,683
+
+
+Analizame que puede estar pasando 
+---------------------------------------------
+
+
+Despues de las recomendaciones, se hace las validaciones  con los scripts sujeridos 
+
+---------------------------------------------
+-- Detectar si LIQ tiene múltiples filas por guía/proceso/fecha
+SELECT
+    NUMERO_GUIA,
+    ID_PROCESO,
+    CONVERT(DATE, FECHA_HORA_MOVIMIENTO) AS FECHA,
+    COUNT(1)                             AS CANTIDAD_FILAS
+FROM [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_GUIAS_LIQUIDACION_PXP_AFOROS]
+WHERE NUMERO_GUIA = 2292411506
+GROUP BY
+    NUMERO_GUIA,
+    ID_PROCESO,
+    CONVERT(DATE, FECHA_HORA_MOVIMIENTO)
+HAVING COUNT(1) > 1;
+
+Respuesta no trae registros
+
+
+---------------------------------------------
+-- Ver qué contiene VALOR_TARIFA_SERVICIO para la guía de prueba
+SELECT
+    NUMERO_GUIA,
+    ID_PROCESO,
+    TIPO_OPERADOR,
+    MODELOS_DE_CONTRATACION_FLOTA,
+    VALOR_TARIFA_SERVICIO,
+    CONVERT(DATE, FECHA_HORA_MOVIMIENTO) AS FECHA
+FROM [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_GUIAS_LIQUIDACION_PXP_AFOROS]
+WHERE NUMERO_GUIA = 2292411506;
+
+El resultado como se preveia era un  solo registro
+
+NUMERO_GUIA	ID_PROCESO	TIPO_OPERADOR	MODELOS_DE_CONTRATACION_FLOTA	VALOR_TARIFA_SERVICIO	FECHA
+2292411506	9	OUTSOURCING FLETE FIJO	3	146907.20	2026-09-19
+
+
+--------------------------------------------------
+Se ejecutan los script sujeridos siguinetes
+
+
+
+-- PASO 1: Verificar si hay fan-out en LIQ
+SELECT
+    NUMERO_GUIA,
+    ID_PROCESO,
+    CONVERT(DATE, FECHA_HORA_MOVIMIENTO) AS FECHA,
+    COUNT(1) AS CANT_FILAS,
+    MIN(VALOR_TARIFA_SERVICIO) AS TARIFA_MIN,
+    MAX(VALOR_TARIFA_SERVICIO) AS TARIFA_MAX,
+    SUM(VALOR_TARIFA_SERVICIO) AS TARIFA_SUM
+FROM [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_GUIAS_LIQUIDACION_PXP_AFOROS]
+WHERE NUMERO_GUIA = 2292411506
+GROUP BY NUMERO_GUIA, ID_PROCESO, CONVERT(DATE, FECHA_HORA_MOVIMIENTO);
+
+-- PASO 2: Simular el UPDATE como SELECT para validar el JOIN corregido (no existe placa)
+SELECT
+    TMP.NUMERO_GUIA,
+    TMP.ID_PROCESO,
+    TMP.PLACA_VEHICULO_DOCU,
+    TMP.TOTAL_PIEZAS_OPERA_DISTRIBUCION,
+    TMP.TOTAL_PIEZAS_OPERA_DEVOLUCION,
+    LIQ.VALOR_TARIFA_SERVICIO,
+    LIQ.MODELOS_DE_CONTRATACION_FLOTA,
+    LIQ.TIPO_OPERADOR,
+    COSTO_CALCULADO =
+        CASE
+            WHEN TMP.ID_PROCESO IN (5, 6) THEN
+                LIQ.VALOR_TARIFA_SERVICIO * CONVERT(FLOAT, TMP.TOTAL_PIEZAS_OPERA_RECOLECCION)
+            WHEN TMP.ID_PROCESO = 9 THEN
+                LIQ.VALOR_TARIFA_SERVICIO * (CONVERT(FLOAT, TMP.TOTAL_PIEZAS_OPERA_DISTRIBUCION)
+                                           - CONVERT(FLOAT, TMP.TOTAL_PIEZAS_OPERA_DEVOLUCION))
+            ELSE TMP.COSTO_FINAL_POR_MODELO
+        END,
+    TMP.COSTO_FINAL_POR_MODELO AS COSTO_ORIGINAL
+FROM [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_OPERACION_MES_BASE01_V02] AS TMP
+INNER JOIN [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_GUIAS_LIQUIDACION_PXP_AFOROS] AS LIQ
+    ON LIQ.NUMERO_GUIA          = TMP.NUMERO_GUIA
+    AND LIQ.ID_PROCESO          = TMP.ID_PROCESO
+    AND CONVERT(DATE, TMP.FECHA_HORA_MOVIMIENTO) = CONVERT(DATE, LIQ.FECHA_HORA_MOVIMIENTO)
+WHERE TMP.NUMERO_GUIA = 2292411506;
+
+
+Pero los resultados siguen siendo los mismos 
+
+PASO 1:
+NUMERO_GUIA	ID_PROCESO	FECHA	CANT_FILAS	TARIFA_MIN	TARIFA_MAX	TARIFA_SUM
+2292411506	9	2026-09-19	1	146907.20	146907.20	146907.20
+
+PASO 2:
+NUMERO_GUIA	ID_PROCESO	PLACA_VEHICULO_DOCU	TOTAL_PIEZAS_OPERA_DISTRIBUCION	TOTAL_PIEZAS_OPERA_DEVOLUCION	VALOR_TARIFA_SERVICIO	MODELOS_DE_CONTRATACION_FLOTA	TIPO_OPERADOR	COSTO_CALCULADO	COSTO_ORIGINAL
+2292411506	9	KPP727	99	0	146907.20	3	OUTSOURCING FLETE FIJO	14543812,8	229512
+
+
+MI CONCLUSION 
+Pensaria que es necesario   ajustar el calculo de costo final por modelo  dependiente si  el producto es de multiples piezas; se dejara el mismo valor procedente del liquidador, pero si no es de multiples piezas  si se multiplicara por el numero de piezas, mi duda es cuando se generan las devoluciones 
+Analizame esta parte 
+
+
+Pero tener en cuenta que tengo productos que manejan valos productos 
+Al realizar una auditoria de productos con el siguiente script: 
+SELECT 
+ID_PRODUCTO_CST,
+ID_PRODUCTO, 
+MAX(NUMERO_PIEZAS) MX_PZ
+FROM [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_OPERACION_MES] AS TMP
+GROUP BY ID_PRODUCTO_CST,
+ID_PRODUCTO 
+
+El resultado es el siguinete 
+ID_PRODUCTO_CST	    ID_PRODUCTO	    MX_PZ
+1	                1	            2
+2	                46	            1
+2	                48	            1
+1	                52	            1
+2	                NULL            	NULL
+1	                11	            1
+2	                53	            1
+2	                54	            1
+59	                59	            1
+2	                86	            1
+2	                2	            18
+2	                7	            1
+2	                9	            1
+1	                24	            1
+2	                27	            1
+1	                65	            1
+2	                82	            130
+6	                6	            772
+2	                8	            1
+2	                10	            1
+2	                40	            1
+1	                55	            1
+
+En teoria el producto 2 no deberia tener mas de una pieza ya que es mercancia premier 
+
+
+Complementa el analis  y generame un informe final de lo que has detectado 
+

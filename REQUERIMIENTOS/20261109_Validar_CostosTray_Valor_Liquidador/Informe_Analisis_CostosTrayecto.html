@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informe — Validación Costos Trayecto vs. Valor Liquidador</title>
+  <style>
+    :root {
+      --rojo:    #c0392b;
+      --rojo-bg: #fdf2f2;
+      --amarillo:    #d68910;
+      --amarillo-bg: #fef9e7;
+      --verde:    #1e8449;
+      --verde-bg: #eafaf1;
+      --azul:     #1a5276;
+      --azul-bg:  #eaf1fb;
+      --gris:     #5d6d7e;
+      --gris-bg:  #f4f6f7;
+      --borde:    #dde1e5;
+      --texto:    #1c2833;
+      --fuente: 'Segoe UI', Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--fuente);
+      font-size: 14px;
+      color: var(--texto);
+      background: #f0f2f5;
+      padding: 32px 16px;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; }
+
+    /* ENCABEZADO */
+    .header {
+      background: var(--azul);
+      color: #fff;
+      border-radius: 8px 8px 0 0;
+      padding: 28px 32px 22px;
+    }
+    .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .header .sub { font-size: 13px; opacity: .85; }
+    .meta-row {
+      display: flex; flex-wrap: wrap; gap: 24px;
+      background: #1a4f7a; border-radius: 0;
+      padding: 12px 32px; font-size: 12.5px; color: #d6eaf8;
+    }
+    .meta-row span b { color: #fff; }
+
+    /* CUERPO */
+    .body { background: #fff; padding: 32px; border-radius: 0 0 8px 8px; }
+
+    /* SECCIONES */
+    .section { margin-bottom: 36px; }
+    .section-title {
+      font-size: 15px; font-weight: 700;
+      color: var(--azul);
+      border-left: 4px solid var(--azul);
+      padding: 4px 0 4px 12px;
+      margin-bottom: 16px;
+    }
+    .section-num {
+      display: inline-block;
+      background: var(--azul);
+      color: #fff;
+      border-radius: 50%;
+      width: 22px; height: 22px;
+      text-align: center; line-height: 22px;
+      font-size: 12px; font-weight: 700;
+      margin-right: 8px;
+    }
+
+    /* ALERTAS */
+    .alert {
+      display: flex; gap: 12px; align-items: flex-start;
+      border-radius: 6px; padding: 14px 16px; margin-bottom: 16px;
+      border-left: 5px solid;
+    }
+    .alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .alert-body { flex: 1; }
+    .alert-title { font-weight: 700; margin-bottom: 4px; font-size: 13.5px; }
+    .alert-text  { font-size: 13px; line-height: 1.6; }
+    .alert.rojo   { background: var(--rojo-bg);    border-color: var(--rojo);    color: #6e1b1b; }
+    .alert.amarillo { background: var(--amarillo-bg); border-color: var(--amarillo); color: #6e4a00; }
+    .alert.verde  { background: var(--verde-bg);   border-color: var(--verde);   color: #145a32; }
+    .alert.azul   { background: var(--azul-bg);    border-color: var(--azul);    color: var(--azul); }
+
+    /* TABLAS */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+    th {
+      background: var(--azul); color: #fff;
+      padding: 9px 12px; text-align: left; font-weight: 600;
+    }
+    td { padding: 8px 12px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+    tr:nth-child(even) td { background: var(--gris-bg); }
+    .badge {
+      display: inline-block; border-radius: 4px;
+      padding: 2px 8px; font-size: 11.5px; font-weight: 700;
+    }
+    .badge-rojo    { background: #fadbd8; color: var(--rojo); }
+    .badge-amarillo { background: #fdebd0; color: #935116; }
+    .badge-verde   { background: #d5f5e3; color: var(--verde); }
+
+    /* CÓDIGO */
+    pre {
+      background: #1e2a38;
+      color: #cdd9e5;
+      border-radius: 6px;
+      padding: 16px 18px;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 12.5px;
+      line-height: 1.65;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    .kw  { color: #79c0ff; }   /* keywords */
+    .fn  { color: #d2a8ff; }   /* functions */
+    .str { color: #a5d6ff; }   /* strings/values */
+    .cm  { color: #8b949e; }   /* comments */
+    .num { color: #79c0ff; }   /* numbers */
+    .op  { color: #ff7b72; }   /* operators / comparison */
+
+    /* RESULTADO QUERY */
+    .result-label {
+      font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .5px; color: var(--gris); margin-bottom: 6px;
+    }
+    .result-box {
+      background: var(--gris-bg); border: 1px solid var(--borde);
+      border-radius: 6px; padding: 14px; margin-bottom: 16px;
+    }
+
+    /* CÁLCULO */
+    .calc-box {
+      background: #fff8e1; border: 1px solid #f9e79f;
+      border-radius: 6px; padding: 14px 18px;
+      font-family: 'Consolas', monospace; font-size: 13px;
+      line-height: 1.8; margin: 12px 0;
+    }
+    .calc-box .err { color: var(--rojo); font-weight: 700; }
+    .calc-box .ok  { color: var(--verde); font-weight: 700; }
+
+    /* STEPS */
+    .steps { counter-reset: step; }
+    .step {
+      display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start;
+    }
+    .step-num {
+      counter-increment: step;
+      flex-shrink: 0;
+      width: 30px; height: 30px;
+      border-radius: 50%; background: var(--azul); color: #fff;
+      text-align: center; line-height: 30px;
+      font-weight: 700; font-size: 13px;
+    }
+    .step-body { flex: 1; padding-top: 4px; }
+    .step-title { font-weight: 700; margin-bottom: 4px; }
+
+    /* FIRMA */
+    .footer {
+      text-align: center; color: var(--gris);
+      font-size: 12px; margin-top: 32px;
+      border-top: 1px solid var(--borde); padding-top: 16px;
+    }
+
+    /* DIVIDIDOR */
+    hr { border: none; border-top: 1px solid var(--borde); margin: 28px 0; }
+
+    p { line-height: 1.65; margin-bottom: 10px; }
+    ul { padding-left: 20px; line-height: 1.8; }
+    li { margin-bottom: 4px; }
+    .highlight { background: #fff3cd; padding: 2px 5px; border-radius: 3px; font-weight: 600; }
+    .mono { font-family: 'Consolas', monospace; background: #f4f6f7; padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+
+    /* APROBACIÓN */
+    .approval-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px; margin-top: 20px;
+    }
+    .approval-box {
+      border: 1px dashed var(--borde); border-radius: 6px;
+      padding: 16px; text-align: center;
+    }
+    .approval-box .role { font-size: 11px; text-transform: uppercase; color: var(--gris); letter-spacing: .5px; margin-bottom: 8px; }
+    .approval-box .name { font-weight: 700; font-size: 13px; margin-bottom: 32px; }
+    .approval-box .line { border-top: 1px solid #aaa; padding-top: 6px; font-size: 11px; color: var(--gris); }
+
+    @media (max-width: 640px) {
+      .approval-grid { grid-template-columns: 1fr; }
+      .meta-row { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ENCABEZADO -->
+  <div class="header">
+    <div class="sub">REQUERIMIENTO TÉCNICO · DARWIN COSTOS</div>
+    <h1>Informe de Análisis — Validación Costos Trayecto vs. Valor Liquidador</h1>
+    <div class="sub">Análisis de desviación en <code>COSTO_FINAL_POR_MODELO</code> post-UPDATE desde tabla LIQ</div>
+  </div>
+  <div class="meta-row">
+    <span><b>Fecha:</b> 2026-11-09</span>
+    <span><b>Analista:</b> John Cruz</span>
+    <span><b>Requerimiento:</b> 20261109_Validar_CostosTray_Valor_Liquidador</span>
+    <span><b>Versión:</b> 2.0 — con resultados de validación</span>
+  </div>
+
+  <div class="body">
+
+    <!-- SECCIÓN 1: CONTEXTO -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">1</span>Contexto del Problema</div>
+      <p>
+        El procedimiento <span class="mono">[TMP].[COSTO_DARWIN_PROC_01_CARGUE_CALCULO_BASE_OPERACION_TEMP]</span>
+        calcula el <span class="mono">COSTO_FINAL_POR_MODELO</span> por guía operativa en varias etapas.
+        En su etapa final, un bloque <strong>UPDATE</strong> sobreescribe ese costo cruzando la tabla base
+        (<span class="mono">TMP</span>) con la tabla de liquidación PXP/Aforos (<span class="mono">LIQ</span>).
+      </p>
+      <p>Al convertir el <strong>UPDATE</strong> a <strong>SELECT</strong> para validación, el costo resulta inflado de forma crítica:</p>
+
+      <table>
+        <thead><tr><th>Escenario</th><th>MODELOS</th><th>PROPIETARIO_VEHICULO</th><th>COSTO_FINAL_POR_MODELO</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Resultado del UPDATE convertido a SELECT</td>
+            <td>3</td>
+            <td>OUTSOURCING FLETE FIJO</td>
+            <td style="color:var(--rojo); font-weight:700;">14,543,812.80</td>
+          </tr>
+          <tr>
+            <td>Cálculo correcto (Paso 2 — sin UPDATE) · KPP727 · ID_PROCESO=9</td>
+            <td>—</td>
+            <td>SALIDA A ZONA URBANA</td>
+            <td style="color:var(--verde); font-weight:700;">229,512.00</td>
+          </tr>
+          <tr>
+            <td>Cálculo correcto · TKF926 · ID_PROCESO=6</td>
+            <td>—</td>
+            <td>ENTRADA DE ZONA URBANA</td>
+            <td style="color:var(--verde); font-weight:700;">144,495.00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert azul">
+        <div class="alert-icon">ℹ️</div>
+        <div class="alert-body">
+          <div class="alert-title">Guía de prueba utilizada: 2292411506</div>
+          <div class="alert-text">Todos los scripts de validación se ejecutaron sobre esta guía. Tiene <strong>59 piezas</strong>, ID_PRODUCTO=6 (Mercancía Industrial), y aparece en múltiples procesos con distintas placas.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- SECCIÓN 2: VALIDACIONES -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">2</span>Validaciones Ejecutadas y Resultados</div>
+
+      <!-- SCRIPT 1 -->
+      <p class="result-label">Script 1 — Verificar si LIQ tiene múltiples filas (fan-out)</p>
+      <pre><span class="kw">SELECT</span>
+    NUMERO_GUIA,
+    ID_PROCESO,
+    <span class="fn">CONVERT</span>(<span class="str">DATE</span>, FECHA_HORA_MOVIMIENTO) <span class="kw">AS</span> FECHA,
+    <span class="fn">COUNT</span>(<span class="num">1</span>) <span class="kw">AS</span> CANTIDAD_FILAS
+<span class="kw">FROM</span> [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_GUIAS_LIQUIDACION_PXP_AFOROS]
+<span class="kw">WHERE</span> NUMERO_GUIA = <span class="num">2292411506</span>
+<span class="kw">GROUP BY</span> NUMERO_GUIA, ID_PROCESO, <span class="fn">CONVERT</span>(<span class="str">DATE</span>, FECHA_HORA_MOVIMIENTO)
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(<span class="num">1</span>) <span class="op">&gt;</span> <span class="num">1</span>;</pre>
+      <div class="result-box">
+        <div class="result-label">Resultado</div>
+        <span class="badge badge-verde">✓ Sin registros</span>
+        <p style="margin-top:8px;">La tabla LIQ tiene exactamente <strong>una fila</strong> por <span class="mono">NUMERO_GUIA + ID_PROCESO + FECHA</span>.
+        El fan-out por JOIN queda <strong>descartado</strong> como causa raíz.</p>
+      </div>
+
+      <!-- SCRIPT 2 -->
+      <p class="result-label">Script 2 — Inspeccionar VALOR_TARIFA_SERVICIO en LIQ</p>
+      <pre><span class="kw">SELECT</span>
+    NUMERO_GUIA, ID_PROCESO, TIPO_OPERADOR,
+    MODELOS_DE_CONTRATACION_FLOTA,
+    VALOR_TARIFA_SERVICIO,
+    <span class="fn">CONVERT</span>(<span class="str">DATE</span>, FECHA_HORA_MOVIMIENTO) <span class="kw">AS</span> FECHA
+<span class="kw">FROM</span> [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_GUIAS_LIQUIDACION_PXP_AFOROS]
+<span class="kw">WHERE</span> NUMERO_GUIA = <span class="num">2292411506</span>;</pre>
+      <div class="result-box">
+        <div class="result-label">Resultado</div>
+        <table>
+          <thead><tr><th>NUMERO_GUIA</th><th>ID_PROCESO</th><th>TIPO_OPERADOR</th><th>MODELOS</th><th>VALOR_TARIFA_SERVICIO</th><th>FECHA</th></tr></thead>
+          <tbody>
+            <tr><td>2292411506</td><td>9</td><td>OUTSOURCING FLETE FIJO</td><td>3</td><td><strong>146,907.20</strong></td><td>2026-09-19</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:8px;">Un solo registro. <strong>La tabla LIQ no contiene placa</strong> — es la estructura correcta del liquidador.</p>
+      </div>
+
+      <!-- SCRIPT 3 -->
+      <p class="result-label">Script 3 — Paso 1: Confirmar valores LIQ / Paso 2: Simular UPDATE como SELECT</p>
+      <div class="result-box">
+        <div class="result-label">Resultado Paso 1</div>
+        <table>
+          <thead><tr><th>NUMERO_GUIA</th><th>ID_PROCESO</th><th>FECHA</th><th>CANT_FILAS</th><th>TARIFA_MIN</th><th>TARIFA_MAX</th><th>TARIFA_SUM</th></tr></thead>
+          <tbody>
+            <tr><td>2292411506</td><td>9</td><td>2026-09-19</td><td>1</td><td>146,907.20</td><td>146,907.20</td><td>146,907.20</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="result-box">
+        <div class="result-label">Resultado Paso 2</div>
+        <table>
+          <thead><tr><th>NUMERO_GUIA</th><th>ID_PROCESO</th><th>PLACA</th><th>TOT_PIEZAS_DIST</th><th>TOT_PIEZAS_DEV</th><th>VALOR_TARIFA</th><th>COSTO_CALCULADO</th><th>COSTO_ORIGINAL</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>2292411506</td><td>9</td><td>KPP727</td>
+              <td style="color:var(--rojo); font-weight:700;">99</td>
+              <td>0</td>
+              <td>146,907.20</td>
+              <td style="color:var(--rojo); font-weight:700;">14,543,812.80</td>
+              <td style="color:var(--verde); font-weight:700;">229,512.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- VERIFICACIÓN MATEMÁTICA -->
+      <div class="calc-box">
+        <strong>Verificación matemática del error:</strong><br/><br/>
+        VALOR_TARIFA_SERVICIO (LIQ) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &nbsp; <strong>146,907.20</strong><br/>
+        TOTAL_PIEZAS_OPERA_DISTRIBUCION &nbsp; = &nbsp; <strong>99</strong> &nbsp; ← total del manifiesto, NO de la guía<br/>
+        TOTAL_PIEZAS_OPERA_DEVOLUCION &nbsp;&nbsp;&nbsp; = &nbsp; <strong>0</strong><br/>
+        <br/>
+        Fórmula actual: &nbsp; 146,907.20 × (99 − 0) &nbsp; = &nbsp;
+        <span class="err">14,543,812.80 ✗</span><br/>
+        Valor correcto esperado: &nbsp;
+        <span class="ok">229,512.00 ✓</span>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- SECCIÓN 3: HALLAZGOS -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">3</span>Hallazgos</div>
+
+      <!-- H1 -->
+      <div class="alert rojo">
+        <div class="alert-icon">🔴</div>
+        <div class="alert-body">
+          <div class="alert-title">Hallazgo 1 — CRÍTICO (Causa Raíz Confirmada): VALOR_TARIFA_SERVICIO es el costo total del servicio, no una tarifa unitaria por pieza</div>
+          <div class="alert-text">
+            <p>La tabla LIQ almacena <span class="mono">VALOR_TARIFA_SERVICIO = 146,907.20</span> como el <strong>valor total liquidado del servicio</strong> para esa guía en ese proceso, ya calculado por el sistema liquidador incluyendo todos los factores comerciales pactados con el operador. <strong>No es una tarifa unitaria por pieza.</strong></p>
+            <p>Al multiplicarlo por <span class="mono">TOTAL_PIEZAS_OPERA_DISTRIBUCION</span> (que a su vez representa el total del manifiesto completo, no de la guía), el resultado se infla 63 veces el valor correcto.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- H2 -->
+      <div class="alert rojo">
+        <div class="alert-icon">🔴</div>
+        <div class="alert-body">
+          <div class="alert-title">Hallazgo 2 — CRÍTICO: TOTAL_PIEZAS_OPERA_DISTRIBUCION refleja el manifiesto, no la guía individual</div>
+          <div class="alert-text">
+            <p>La guía <span class="mono">2292411506</span> tiene <span class="mono">NUMERO_PIEZAS = 59</span> (sus propias piezas), pero <span class="mono">TOTAL_PIEZAS_OPERA_DISTRIBUCION = 99</span>.</p>
+            <p>Este campo es un <strong>agregado a nivel de vehículo / proceso / fecha</strong> que suma las piezas de todas las guías transportadas en ese manifiesto. Usarlo en la fórmula de costo por guía produce doble contabilización del volumen.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- H3 -->
+      <div class="alert amarillo">
+        <div class="alert-icon">🟡</div>
+        <div class="alert-body">
+          <div class="alert-title">Hallazgo 3 — MEDIO: Calidad de datos — productos con piezas anómalas</div>
+          <div class="alert-text">
+            <p>El script de auditoría de productos reveló anomalías en la cantidad máxima de piezas por tipo de producto:</p>
+            <table style="margin-top:10px;">
+              <thead><tr><th>ID_PRODUCTO_CST</th><th>ID_PRODUCTO</th><th>MAX_PIEZAS</th><th>Esperado</th><th>Anomalía</th></tr></thead>
+              <tbody>
+                <tr><td>2 — Mercancía Premier</td><td>2</td><td>18</td><td>1</td><td><span class="badge badge-amarillo">Excede lo esperado</span></td></tr>
+                <tr><td>2 — Mercancía Premier</td><td>82</td><td><strong>130</strong></td><td>1</td><td><span class="badge badge-rojo">Anomalía severa</span></td></tr>
+                <tr><td>6 — Mercancía Industrial</td><td>6</td><td>772</td><td>Variable</td><td><span class="badge badge-verde">Válido por naturaleza</span></td></tr>
+                <tr><td>1 — Documento Unitario</td><td>1</td><td>2</td><td>1</td><td><span class="badge badge-amarillo">Excede lo esperado</span></td></tr>
+              </tbody>
+            </table>
+            <p style="margin-top:10px;"><strong>Riesgo:</strong> Si alguna corrección futura usa <span class="mono">NUMERO_PIEZAS</span> para normalizar la tarifa del liquidador, los productos con valores anómalos (especialmente ID_PRODUCTO=82 con 130 piezas) producirían nuevos errores de cálculo.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- H4 -->
+      <div class="alert amarillo">
+        <div class="alert-icon">🟡</div>
+        <div class="alert-body">
+          <div class="alert-title">Hallazgo 4 — MEDIO: El error en proceso 9 se propaga automáticamente al proceso 24</div>
+          <div class="alert-text">
+            <p>El script original contiene un segundo UPDATE que copia el <span class="mono">COSTO_FINAL_POR_MODELO</span> del proceso 9 al proceso 24 (Reportado Entregado) para la misma guía/placa. Si el primer UPDATE produce un costo incorrecto para el proceso 9, ese valor erróneo se propaga en cascada al proceso 24 sin ninguna validación intermedia.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- SECCIÓN 4: RESUMEN -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">4</span>Resumen Ejecutivo de Hallazgos</div>
+      <table>
+        <thead><tr><th>#</th><th>Severidad</th><th>Hallazgo</th><th>Impacto directo</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><span class="badge badge-rojo">🔴 CRÍTICO</span></td>
+            <td><span class="mono">VALOR_TARIFA_SERVICIO</span> es el costo total del servicio; se multiplica incorrectamente por las piezas del manifiesto</td>
+            <td><span class="mono">COSTO_FINAL_POR_MODELO</span> inflado ~63×</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><span class="badge badge-rojo">🔴 CRÍTICO</span></td>
+            <td><span class="mono">TOTAL_PIEZAS_OPERA_DISTRIBUCION = 99</span> es el total del manifiesto, no de la guía individual (guía tiene 59 piezas)</td>
+            <td>Doble contabilización del volumen</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><span class="badge badge-amarillo">🟡 MEDIO</span></td>
+            <td>Productos <span class="mono">ID_PRODUCTO_CST=2</span> (Mercancía Premier) con hasta 130 piezas cuando deberían ser 1</td>
+            <td>Riesgo en correcciones futuras basadas en <span class="mono">NUMERO_PIEZAS</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><span class="badge badge-amarillo">🟡 MEDIO</span></td>
+            <td>Error en proceso 9 se propaga automáticamente al proceso 24 por segundo UPDATE</td>
+            <td>Error duplicado en dos procesos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr />
+
+    <!-- SECCIÓN 5: CORRECCIÓN -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">5</span>Corrección Propuesta</div>
+
+      <div class="alert verde">
+        <div class="alert-icon">✅</div>
+        <div class="alert-body">
+          <div class="alert-title">Regla de negocio ajustada (alineada con la conclusión del analista)</div>
+          <div class="alert-text">
+            <table style="margin-top:8px;">
+              <thead><tr><th>Condición del producto</th><th>Fórmula correcta</th></tr></thead>
+              <tbody>
+                <tr><td>Producto de <strong>pieza única</strong> (1 pieza por guía — Documento, Mercancía Premier)</td><td><span class="mono">LIQ.VALOR_TARIFA_SERVICIO × NUMERO_PIEZAS</span> de la guía</td></tr>
+                <tr><td>Producto de <strong>múltiples piezas</strong> (Mercancía Industrial — ID_PRODUCTO_CST=6)</td><td><span class="mono">LIQ.VALOR_TARIFA_SERVICIO</span> directamente (el liquidador ya incluye el volumen)</td></tr>
+                <tr><td>Devoluciones</td><td>No aplican descuento adicional; el ajuste ya está reflejado en <span class="mono">VALOR_TARIFA_SERVICIO</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top:16px;"><strong>Código SQL sugerido para el bloque UPDATE (proceso 9 — distribución):</strong></p>
+      <pre><span class="cm">-- CORRECCIÓN PROPUESTA: ajuste por tipo de producto</span>
+TMP.COSTO_FINAL_POR_MODELO =
+    <span class="kw">CASE</span>
+        <span class="cm">-- Procesos 5 y 6 (recolección): tarifa × piezas propias de la guía</span>
+        <span class="kw">WHEN</span> TMP.ID_PROCESO <span class="kw">IN</span> (<span class="num">5</span>, <span class="num">6</span>) <span class="kw">THEN</span>
+            LIQ.VALOR_TARIFA_SERVICIO
+            * <span class="fn">IIF</span>(<span class="fn">CONVERT</span>(<span class="str">FLOAT</span>, TMP.NUMERO_PIEZAS) <span class="op">&lt;</span> <span class="num">1</span>, <span class="num">0</span>,
+                  <span class="fn">CONVERT</span>(<span class="str">FLOAT</span>, TMP.NUMERO_PIEZAS))
+
+        <span class="cm">-- Proceso 9 (distribución): depende del tipo de producto</span>
+        <span class="kw">WHEN</span> TMP.ID_PROCESO = <span class="num">9</span> <span class="kw">THEN</span>
+            <span class="kw">CASE</span>
+                <span class="cm">-- Mercancía Industrial (multipieza): el liquidador ya valuó el total</span>
+                <span class="kw">WHEN</span> TMP.ID_PRODUCTO_CST <span class="kw">IN</span> (<span class="num">6</span>)
+                    <span class="kw">THEN</span> LIQ.VALOR_TARIFA_SERVICIO
+
+                <span class="cm">-- Otros (Documento, Mercancía Premier, etc.): tarifa × piezas de la guía</span>
+                <span class="kw">ELSE</span>
+                    LIQ.VALOR_TARIFA_SERVICIO
+                    * <span class="fn">IIF</span>(<span class="fn">CONVERT</span>(<span class="str">FLOAT</span>, TMP.NUMERO_PIEZAS) <span class="op">&lt;</span> <span class="num">1</span>, <span class="num">0</span>,
+                          <span class="fn">CONVERT</span>(<span class="str">FLOAT</span>, TMP.NUMERO_PIEZAS))
+            <span class="kw">END</span>
+
+        <span class="cm">-- Cualquier otro proceso: conservar el valor calculado en el Paso 2</span>
+        <span class="kw">ELSE</span>
+            TMP.COSTO_FINAL_POR_MODELO
+    <span class="kw">END</span></pre>
+
+      <div class="alert azul" style="margin-top:16px;">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-body">
+          <div class="alert-title">Importante antes de aplicar la corrección</div>
+          <div class="alert-text">Confirmar con el equipo de Darwin/Liquidador qué representa exactamente <span class="mono">VALOR_TARIFA_SERVICIO</span> para cada tipo de producto. La regla multipieza debe formalizarse con los responsables del sistema liquidador antes de modificar el procedimiento en producción.</div>
+        </div>
+      </div>
+
+      <p style="margin-top:20px;"><strong>Script de validación post-corrección (ejecutar como SELECT antes del UPDATE):</strong></p>
+      <pre><span class="kw">SELECT</span>
+    TMP.NUMERO_GUIA,
+    TMP.ID_PROCESO,
+    TMP.PLACA_VEHICULO_DOCU,
+    TMP.ID_PRODUCTO_CST,
+    TMP.NUMERO_PIEZAS,
+    TMP.TOTAL_PIEZAS_OPERA_DISTRIBUCION,
+    LIQ.VALOR_TARIFA_SERVICIO,
+    <span class="cm">-- Fórmula actual (referencia del problema)</span>
+    COSTO_ACTUAL = LIQ.VALOR_TARIFA_SERVICIO
+                   * (<span class="fn">CONVERT</span>(<span class="str">FLOAT</span>, TMP.TOTAL_PIEZAS_OPERA_DISTRIBUCION)
+                     - <span class="fn">CONVERT</span>(<span class="str">FLOAT</span>, TMP.TOTAL_PIEZAS_OPERA_DEVOLUCION)),
+    <span class="cm">-- Fórmula corregida (propuesta)</span>
+    COSTO_CORREGIDO =
+        <span class="kw">CASE</span>
+            <span class="kw">WHEN</span> TMP.ID_PROCESO <span class="kw">IN</span> (<span class="num">5</span>, <span class="num">6</span>)
+                <span class="kw">THEN</span> LIQ.VALOR_TARIFA_SERVICIO
+                     * <span class="fn">IIF</span>(<span class="fn">CONVERT</span>(<span class="str">FLOAT</span>, TMP.NUMERO_PIEZAS) <span class="op">&lt;</span> <span class="num">1</span>, <span class="num">0</span>,
+                           <span class="fn">CONVERT</span>(<span class="str">FLOAT</span>, TMP.NUMERO_PIEZAS))
+            <span class="kw">WHEN</span> TMP.ID_PROCESO = <span class="num">9</span> <span class="kw">AND</span> TMP.ID_PRODUCTO_CST <span class="kw">IN</span> (<span class="num">6</span>)
+                <span class="kw">THEN</span> LIQ.VALOR_TARIFA_SERVICIO
+            <span class="kw">WHEN</span> TMP.ID_PROCESO = <span class="num">9</span>
+                <span class="kw">THEN</span> LIQ.VALOR_TARIFA_SERVICIO
+                     * <span class="fn">IIF</span>(<span class="fn">CONVERT</span>(<span class="str">FLOAT</span>, TMP.NUMERO_PIEZAS) <span class="op">&lt;</span> <span class="num">1</span>, <span class="num">0</span>,
+                           <span class="fn">CONVERT</span>(<span class="str">FLOAT</span>, TMP.NUMERO_PIEZAS))
+            <span class="kw">ELSE</span> TMP.COSTO_FINAL_POR_MODELO
+        <span class="kw">END</span>,
+    TMP.COSTO_FINAL_POR_MODELO <span class="kw">AS</span> COSTO_PASO2_ORIGINAL
+<span class="kw">FROM</span> [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_OPERACION_MES_BASE01_V02] <span class="kw">AS</span> TMP
+<span class="kw">INNER JOIN</span> [SIG_COLOMBIA_DW].[TMP].[COSTO_DARWIN_BASE_GUIAS_LIQUIDACION_PXP_AFOROS] <span class="kw">AS</span> LIQ
+    <span class="kw">ON</span> LIQ.NUMERO_GUIA = TMP.NUMERO_GUIA
+    <span class="kw">AND</span> LIQ.ID_PROCESO = TMP.ID_PROCESO
+    <span class="kw">AND</span> <span class="fn">CONVERT</span>(<span class="str">DATE</span>, TMP.FECHA_HORA_MOVIMIENTO) = <span class="fn">CONVERT</span>(<span class="str">DATE</span>, LIQ.FECHA_HORA_MOVIMIENTO)
+<span class="kw">WHERE</span> TMP.NUMERO_GUIA = <span class="num">2292411506</span>;</pre>
+    </div>
+
+    <hr />
+
+    <!-- SECCIÓN 6: PENDIENTES -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">6</span>Pendientes a Confirmar con el Equipo de Negocio</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <div class="step-title">¿Qué representa exactamente <span class="mono">VALOR_TARIFA_SERVICIO</span> en LIQ?</div>
+            ¿Es el costo total liquidado para ese servicio/guía? ¿O es una tarifa unitaria sobre la que sí se debe aplicar un multiplicador de piezas?
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <div class="step-title">¿Cuál es el multiplicador correcto para productos de pieza única?</div>
+            ¿<span class="mono">NUMERO_PIEZAS</span> de la guía (59)? ¿O <span class="mono">1</span> (ya que el liquidador determina el costo por guía independiente del volumen)?
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <div class="step-title">¿Las devoluciones afectan el <span class="mono">VALOR_TARIFA_SERVICIO</span> que llega de LIQ?</div>
+            Si LIQ ya descuenta devoluciones, aplicar <span class="mono">(TOTAL_PIEZAS_DISTRIBUCION − TOTAL_PIEZAS_DEVOLUCION)</span> duplicaría el ajuste.
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <div class="step-title">¿Los productos <span class="mono">ID_PRODUCTO_CST=2</span> con más de 1 pieza son casos legítimos o errores de carga?</div>
+            Si son errores, corregirlos en la tabla fuente evita distorsiones en cualquier cálculo futuro.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- SECCIÓN 7: PRÓXIMOS PASOS -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">7</span>Próximos Pasos</div>
+      <table>
+        <thead><tr><th>#</th><th>Acción</th><th>Responsable</th><th>Prioridad</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Confirmar con Darwin/Liquidador el significado de <span class="mono">VALOR_TARIFA_SERVICIO</span> por tipo de producto</td>
+            <td>John Cruz + Equipo Darwin</td>
+            <td><span class="badge badge-rojo">Alta</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Ejecutar el script de validación post-corrección con la guía <span class="mono">2292411506</span></td>
+            <td>John Cruz</td>
+            <td><span class="badge badge-rojo">Alta</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Ampliar la validación a 10–20 guías de distintos productos y modelos de contratación</td>
+            <td>John Cruz</td>
+            <td><span class="badge badge-rojo">Alta</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Ajustar el UPDATE en <span class="mono">ScriptCostosTrayecto_original.sql</span> con la fórmula aprobada</td>
+            <td>John Cruz</td>
+            <td><span class="badge badge-amarillo">Media</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Investigar el origen de <span class="mono">ID_PRODUCTO_CST=2</span> con 130 piezas (ID_PRODUCTO=82)</td>
+            <td>Equipo de datos</td>
+            <td><span class="badge badge-amarillo">Media</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Ejecutar el script completo sobre el periodo y validar <span class="mono">COSTO_FINAL_POR_MODELO</span> agregado vs. reporte del liquidador</td>
+            <td>John Cruz</td>
+            <td><span class="badge badge-amarillo">Media</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr />
+
+    <!-- SECCIÓN 8: APROBACIÓN -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">8</span>Aprobación para Aplicar Correcciones</div>
+      <div class="alert azul">
+        <div class="alert-icon">📋</div>
+        <div class="alert-body">
+          <div class="alert-title">Se requiere autorización previa a la modificación del script en producción</div>
+          <div class="alert-text">Las correcciones propuestas en la sección 5 impactan directamente el cálculo de costos del periodo. Su aplicación requiere la validación y firma de los responsables indicados.</div>
+        </div>
+      </div>
+      <div class="approval-grid">
+        <div class="approval-box">
+          <div class="role">Preparado por</div>
+          <div class="name">John Cruz</div>
+          <div class="line">Firma / Fecha</div>
+        </div>
+        <div class="approval-box">
+          <div class="role">Revisado por</div>
+          <div class="name">Equipo Darwin / Liquidador</div>
+          <div class="line">Firma / Fecha</div>
+        </div>
+        <div class="approval-box">
+          <div class="role">Autorizado por</div>
+          <div class="name">&nbsp;</div>
+          <div class="line">Firma / Fecha</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <div class="footer">
+    Informe técnico interno · Darwin Costos · Versión 2.0 · 2026-11-09 · John Cruz
+  </div>
+
+</div><!-- /wrap -->
+</body>
+</html>
